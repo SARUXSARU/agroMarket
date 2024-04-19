@@ -17,6 +17,8 @@ import java.util.Base64;
 @AllArgsConstructor
 @Service
 public class AdService {
+
+    //todo check if add img work with front
     private AdRepository adRepository;
     public AddAdResponseDTO addAd(AdDTO adDTO) {
 
