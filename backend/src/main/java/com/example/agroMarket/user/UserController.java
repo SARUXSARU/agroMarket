@@ -1,6 +1,7 @@
 package com.example.agroMarket.user;
 
 import com.example.agroMarket.user.dto.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +16,14 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/")
-    ResponseEntity<AddUserResponseDTO> addUser(@RequestBody UserDTO userDTO){
+    ResponseEntity<AddUserResponseDTO> addUser(@RequestBody @Valid UserDTO userDTO){
         AddUserResponseDTO response=userService.addUser(userDTO);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/login")
+    ResponseEntity<CheckIfUserResponseDTO> checkIfUser(@RequestBody UserLoginDTO userLoginDTO){
+        CheckIfUserResponseDTO response=userService.checkIfUser(userLoginDTO);
         return ResponseEntity.ok(response);
     }
 

@@ -7,6 +7,7 @@ import com.example.agroMarket.user.dto.*;
 import com.example.agroMarket.user.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.apache.catalina.User;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.aggregation.ArithmeticOperators;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ public class UserService {
     private UserRepository userRepository;
 
     public AddUserResponseDTO addUser(UserDTO userDTO) {
-        UserEntity userEntity = new UserEntity(null, userDTO.getName(), userDTO.getAuthCode(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail());
+        UserEntity userEntity = new UserEntity(null, null, userDTO.getAuthCode(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail());
         if (userRepository.findUserEntityByEmailOrName(userDTO.getEmail(), userDTO.getName()).isPresent()) {
             throw new UserWithThisNameExistException("Already exist user with this name or email");
         }
@@ -31,6 +32,15 @@ public class UserService {
         UserDTO userDTO = new UserDTO(userEntity.getName(), userEntity.getAuthCode(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getEmail());
         return new GetUserResponseDTO(userDTO, "ok", HttpStatus.OK);
     }
+
+
+    public CheckIfUserResponseDTO checkIfUser(UserLoginDTO userLoginDTO){
+        UserEntity userEntity=userRepository.findUserEntityByEmailAndAuthCode(userLoginDTO.getEmail(), userLoginDTO.getAuthCode()).orElseThrow(() -> new WrongUserID("Email or password is wrong"));
+        UserDTO userDTO = new UserDTO(userEntity.getName(), userEntity.getAuthCode(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getEmail());
+        return new CheckIfUserResponseDTO(userDTO, "ok", HttpStatus.OK);
+    }
+
+
 
     public DeleteUserResponseDTO deleteUser(ObjectId _id) {
         userRepository.findUserEntityBy_id(_id).orElseThrow(() -> new WrongUserID("There is no user with this _id"));
