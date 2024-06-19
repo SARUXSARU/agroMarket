@@ -1,15 +1,11 @@
 package com.example.agroMarket.user;
 
-import com.example.agroMarket.exception.UserWithThisEmailExistException;
 import com.example.agroMarket.exception.UserWithThisNameExistException;
 import com.example.agroMarket.exception.WrongUserID;
 import com.example.agroMarket.user.dto.*;
 import com.example.agroMarket.user.entity.UserEntity;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import org.apache.catalina.User;
 import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.core.aggregation.ArithmeticOperators;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 

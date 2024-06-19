@@ -1,16 +1,10 @@
 package com.example.agroMarket.ad;
 
 import com.example.agroMarket.ad.dto.*;
-import com.example.agroMarket.user.UserService;
-import com.example.agroMarket.user.dto.AddUserResponseDTO;
-import com.example.agroMarket.user.dto.DeleteUserResponseDTO;
-import com.example.agroMarket.user.dto.GetUserResponseDTO;
-import com.example.agroMarket.user.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("api/v1/ad")
@@ -18,26 +12,28 @@ import org.springframework.web.multipart.MultipartFile;
 public class AdController {
 
     private AdService adService;
+
     @PostMapping("/")
-    ResponseEntity<AddAdResponseDTO> addUser(@RequestBody AdDTO adDTO){
-        AddAdResponseDTO response=adService.addAd(adDTO);
+    ResponseEntity<AddAdResponseDTO> addUser(@RequestBody AdDTO adDTO) {
+        AddAdResponseDTO response = adService.addAd(adDTO);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{_id}")
-    ResponseEntity<GetAdResponseDTO> getAd(@PathVariable ObjectId _id){
-        GetAdResponseDTO response=adService.getAd(_id);
+    ResponseEntity<GetAdResponseDTO> getAd(@PathVariable ObjectId _id) {
+        GetAdResponseDTO response = adService.getAd(_id);
         return ResponseEntity.ok(response);
     }
+
     @DeleteMapping("/{_id}")
-    ResponseEntity<DeleteAdResponseDTO> deleteAd(@PathVariable ObjectId _id){
-        DeleteAdResponseDTO response=adService.deleteAd(_id);
+    ResponseEntity<DeleteAdResponseDTO> deleteAd(@PathVariable ObjectId _id) {
+        DeleteAdResponseDTO response = adService.deleteAd(_id);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/{_id}")
-    ResponseEntity<EditAdResponseDTO> editAd(@RequestBody AdDTO adDTO,@PathVariable ObjectId _id){
-        EditAdResponseDTO response=adService.editAd(adDTO, _id);
+    ResponseEntity<EditAdResponseDTO> editAd(@RequestBody AdDTO adDTO, @PathVariable ObjectId _id) {
+        EditAdResponseDTO response = adService.editAd(adDTO, _id);
         return ResponseEntity.ok(response);
     }
 
