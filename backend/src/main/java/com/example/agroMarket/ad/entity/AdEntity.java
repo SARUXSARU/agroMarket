@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.List;
+
 @Document("ad")
 @AllArgsConstructor
 @Data
@@ -14,9 +17,9 @@ public class AdEntity {
     private ObjectId _id;
     private String title;
     private double price;
-//    private int category; // 1-4 frontend get number and show right cat name
-//    private String description; // max length 500
-   private byte[] img;
+    private List<String> images;
+    private int category; // min 1 max 5 (owoce/warzywa/zboża/miody/grzyby)
+    private String description; // max length 350
 
 
 
