@@ -9,7 +9,8 @@ import { Link, useLocation } from 'react-router-dom'
 import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm'
 import { useNavigate } from 'react-router-dom'
-
+import axios from 'axios'
+const api="http://localhost:8080/api/v1/"
 
 
 export default function Navbar() {
@@ -26,9 +27,19 @@ export default function Navbar() {
     setIsLoggedIn(loggedInStatus==='true');
   })
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
+    //const data={email,password}
+    // console.log(data)
+
+    // try{
+    //   const {data} = await axios.post($(api))
+    // }catch(error){
+    //     console.log(error);
+    // }
+
     setIsLoggedIn(true);
     localStorage.setItem('isLoggedIn', true);
+
     setIsLoginFormOpen(false);
   };
 
