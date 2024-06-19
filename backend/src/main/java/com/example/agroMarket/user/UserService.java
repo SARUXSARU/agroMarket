@@ -19,7 +19,7 @@ public class UserService {
     private UserRepository userRepository;
 
     public AddUserResponseDTO addUser(UserDTO userDTO) {
-        UserEntity userEntity = new UserEntity(null, null, userDTO.getAuthCode(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail());
+        UserEntity userEntity = new UserEntity(null, userDTO.getName(), userDTO.getAuthCode(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail());
         if (userRepository.findUserEntityByEmailOrName(userDTO.getEmail(), userDTO.getName()).isPresent()) {
             throw new UserWithThisNameExistException("Already exist user with this name or email");
         }
