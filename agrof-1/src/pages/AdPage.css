@@ -1,0 +1,182 @@
+.AdPage {
+  background-color: #e3dfd6;
+  min-height: 100vh; 
+}
+
+.description-map {
+  display: flex;
+  flex-direction: row;
+  gap: 200px;
+  margin-left: 80px;
+}
+
+.opis-container {
+  background-color: #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  width: 550px;
+  box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.2);
+  margin-top: 5px;
+}
+
+.opis-tytul {
+  font-weight: bold;
+  /* pogrubiony tekst */
+  font-size: 20px;
+  color: rgb(30, 30, 30);
+  text-shadow: 1px 1px 3px rgba(74, 74, 74, 0.5);
+}
+
+.opis-tresc {
+  padding-top: 5px;
+  font-size: 15px;
+  word-wrap: break-word;
+}
+
+.img-price {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.img-slider {
+  position: relative;
+  display: flex;
+  justify-content: column;
+  align-items: center;
+  gap: 10px;
+  /* margin-left: 200px; */
+
+}
+
+.img-size {
+  width: 500px;
+  height: 300px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  box-shadow: 0px 10px 16px 0px rgba(0, 0, 0, 0.2);
+}
+
+.rightArrowStyles {
+  text-align: center;
+  font-weight: bold;
+  justify-content: center;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+  color: rgb(98, 98, 98);
+  cursor: pointer;
+}
+
+.dot-container {
+  position: absolute;
+  /* Ustaw absolutną pozycję */
+  left: 45%;
+  /* Umieść .dot-container w lewym rogu .img-slider */
+  bottom: 0;
+  /* Umieść .dot-container na dole */
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.price-container {
+  background-color: #ccc;
+  /* szare tło */
+  border-radius: 5px;
+  /* zaokrąglone rogi */
+  padding: 10px;
+  /* dodatkowy odstęp wewnątrz kontenera */
+  margin-left: 80px;
+  width: 550px;
+  height: 280px;
+  box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.2);
+  margin-top: 5px;
+}
+
+.price-tytul {
+  display: flex;
+  flex-direction: row;
+  font-weight: bold;
+  font-size: 38px;
+  color: rgb(30, 30, 30);
+  text-shadow: 1px 1px 3px rgba(74, 74, 74, 0.5);
+
+}
+
+.price-cena {
+  font-weight: bold;
+  font-size: 25px;
+  color: rgb(39, 39, 39);
+  text-shadow: 1px 1px 1px rgba(74, 74, 74, 0.5);
+
+}
+
+.price-user-imie {
+  margin-top: 70px;
+  font-size: 18px;
+}
+
+.price-user-tel {
+  font-size: 18px;
+}
+
+.like-button-price {
+  display: flex;
+  border: none;
+  margin-left: 60%;
+  background-color: transparent;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.paginationContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 5px;
+}
+
+.paginationPageButton {
+  border-radius: 5px;
+  width: 30px;
+  margin-left: 5px;
+  margin-right: 5px;
+  background-color: orange;
+  text-shadow: 1px 1px 3px rgba(74, 74, 74, 0.5);
+  border-color: orange;
+  box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.paginationPageButtonActive {
+  border-radius: 5px;
+  width: 30px;
+  margin-left: 5px;
+  margin-right: 5px;
+  background-color: rgb(204, 132, 0);
+  text-shadow: 1px 1px 3px rgba(74, 74, 74, 0.5);
+  border-color: rgb(204, 132, 0);
+  box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.paginationNePrButton {
+  border-radius: 5px;
+  width: 30px;
+  background-color: rgba(30, 30, 30, 0.156);
+  text-shadow: 2px 2px 4px rgba(74, 74, 74, 0.5);
+  border-style: none;
+  box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  font-weight: bold;
+  color: orange;
+
+}
