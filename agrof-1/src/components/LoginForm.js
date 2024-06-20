@@ -2,14 +2,12 @@ import React, { useContext, useState } from 'react'
 import closeIcon from './icons/closeIcon.png'
 import eyeIcon from './icons/eye.png'
 import axios from '../services/api.js';
-//import { UserContext } from '../contexts/UserContext.js';
 import { useUser } from '../contexts/UserContext.js';
 
 
 export default function LoginForm({ closeModal, handleLogin, openRegister }) {
 
     const { setUser } = useUser();
-    //console.log("userContext: "+setUser)
 
     function showPassword() {
         var x = document.getElementById("password");
@@ -29,8 +27,6 @@ export default function LoginForm({ closeModal, handleLogin, openRegister }) {
         const form = event.target;
         if (form.checkValidity()) {
 
-            // console.log("email" + form.email.value);
-            //console.log("authCode" + form.password.value);
             const email = form.email.value;
             const authCode = form.password.value;
 
@@ -39,8 +35,6 @@ export default function LoginForm({ closeModal, handleLogin, openRegister }) {
                     {
                         email, authCode
                     });
-                //console.log(response.data);
-
                 if (response.status === 200) {
                     setUser(response.data.userDTO);
                     console.log(response.data.userDTO);
