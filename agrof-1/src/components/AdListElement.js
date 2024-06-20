@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import wheat from './icons/wheat.png'
 import heart from './icons/heart.png'
 import heartRed from './icons/heartRed.png'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import AddAd from './AddAdForm'
 import EditAdForm from './EditAdForm'
 
@@ -39,19 +39,19 @@ export default function AdListElement({title,price,adLocation,image,category,sel
             return null;
     }
 
-    console.log(image);
+    
 
     const shortTittle=title.length > 11 ? title.slice(0,11) + '..' : title;
 
     return (
         <div className='ad'>
-            <a href='/adPage' className='ad-click'>
+            <Link to='/adPage' className='ad-click'>
                 <div className='ad-div-img'>
                     <img className='ad-img' alt="marchew" src={require("./../components/icons/" + image)}></img>
                 </div>
                 <div className='ad-div-details'>
                     <div className='ad-div-header'>
-                        <text className='ad-tittle'>{shortTittle}</text>
+                        <span className='ad-tittle'>{shortTittle}</span>
                         
                             <button className='like-button' onClick={handleLikeClick}>
                             <img src={isLiked ? heartRed : heart} alt='Like' style={{ width: '20px', height: '20px' }} />  
@@ -59,11 +59,11 @@ export default function AdListElement({title,price,adLocation,image,category,sel
                         {renderEditAdButton()}
                         
                     </div>
-                    <text className='ad-price'>{price}</text>
-                    <text className='ad-location'>{adLocation}</text>
+                    <span className='ad-price'>{price}</span>
+                    <span className='ad-location'>{adLocation}</span>
                 </div>
 
-            </a>
+            </Link>
                     {isEditAdFormOpen&& (
                         <div className='modal-background'>
                             <EditAdForm closeModal={handleEditAdFormClose}></EditAdForm>

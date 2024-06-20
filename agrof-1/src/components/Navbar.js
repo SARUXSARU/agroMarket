@@ -28,15 +28,6 @@ export default function Navbar() {
   })
 
   const handleLogin = async () => {
-    //const data={email,password}
-    // console.log(data)
-
-    // try{
-    //   const {data} = await axios.post($(api))
-    // }catch(error){
-    //     console.log(error);
-    // }
-
     setIsLoggedIn(true);
     localStorage.setItem('isLoggedIn', true);
 
@@ -74,20 +65,21 @@ function renderUserIcon(){
   if (isLoggedIn == true && location.pathname==='/userPage')
     return (
       <div className='logoutUserContainer'>
-        <a href='/userPage' className='profil-icon' ></a>
+        
+        <Link to='/userPage' className='profil-icon' ></Link>
         <button className='logoutButton' onClick={handleLogout}>Wyloguj się</button>
       </div>
     )
   else if (isLoggedIn == true)
     return (
       <div className='logoutUserContainer'>
-        <a href='/userPage' className='profil-icon' ></a>
+        <Link to='/userPage' className='profil-icon' ></Link>
       </div>
     )
   else{
     return(
       <div>
-      <a className='profil-icon' onClick={handleIconClick}></a>
+      <Link className='profil-icon' onClick={handleIconClick}></Link>
       {isLoginFormOpen && ( 
         <div className='modal-background'> 
          <LoginForm  closeModal={closeModal} handleLogin={handleLogin} openRegister={handleRegisterClick}/>
@@ -125,56 +117,56 @@ const renderCategories = () => {
   if (location.pathname === '/')
     return (
       <div className='navbar-categories'>
-        <a href='/searchResults' >
+        <Link to='/searchResults' >
           <div className='navbar-category'>
             <button className='navbar-fruit-button'  >
               <img className='fruit-category-icon' src={fruit} alt='fruit' />
             </button>
-            <text className='navbar-category-text'>
+            <span className='navbar-category-text'>
               Owoce
-            </text>
+            </span>
           </div>
-        </a>
-        <a href='/searchResults' >
+        </Link>
+        <Link to='/searchResults' >
           <div className='navbar-category' onClick={() => handleCategoryClick(2)}>
             <button className='navbar-fruit-button' >
               <img className='fruit-category-icon' src={vegetable} alt='vegetable' />
             </button>
-            <text className='navbar-category-text'>
+            <span className='navbar-category-text'>
               Warzywa
-            </text>
+            </span>
           </div>
-        </a>
-        <a href='/searchResults' >
+        </Link>
+        <Link to='/searchResults' >
           <div className='navbar-category' >
             <button className='navbar-fruit-button' >
               <img className='fruit-category-icon' src={mushroom} alt='mushroom' />
             </button>
-            <text className='navbar-category-text'>
+            <span className='navbar-category-text'>
               Grzyby
-            </text>
+            </span>
           </div>
-        </a>
-        <a href='/searchResults' >
+        </Link>
+        <Link to='/searchResults' >
           <div className='navbar-category' >
             <button className='navbar-fruit-button' >
               <img className='fruit-category-icon' src={honey} alt='honey' />
             </button>
-            <text className='navbar-category-text'>
+            <span className='navbar-category-text'>
               Miody
-            </text>
+            </span>
           </div>
-        </a>
-        <a href='/searchResults' >
+        </Link>
+        <Link to='/searchResults' >
           <div className='navbar-category' >
             <button className='navbar-fruit-button' >
               <img className='fruit-category-icon' src={wheat} alt='wheat' />
             </button>
-            <text className='navbar-category-text'>
+            <span className='navbar-category-text'>
               Zboża
-            </text>
+            </span>
           </div>
-        </a>
+        </Link>
       </div>
     )
   else
@@ -193,9 +185,9 @@ const handleRegisterClick = () => {
 return (
   <div className='navbar'>
 
-    <a href='/' className="navbar-logo">
+    <Link to='/' className="navbar-logo">
       <img href='/' src={logo} className='navbar-logo' alt="logo" />
-    </a>
+    </Link>
 
     {renderSearchBar()}
 

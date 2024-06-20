@@ -55,7 +55,7 @@ export default function RegisterForm({ closeModal, openLogin, handleRegister }) 
                     </div>
                     <div className='loginRegisterButtonContainer'>
                         <input type="submit" className='loginRegisterButton' value={"Zarejestruj sie"} id="register"></input>
-                        <text className='loginOrRegisterText'>masz już konto?</text>
+                        <span className='loginOrRegisterText'>masz już konto?</span>
                         <button type="button" className='loginRegisterButton' onClick={openLogin}>Zaloguj się</button>
 
 

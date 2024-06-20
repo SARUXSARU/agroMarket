@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import arrow from './icons/arrow.svg'
+import { Link } from 'react-router-dom';
 
 export default function StripsMenuBar() {
     const [isMenuOpen, setMenuOpen] = useState(false);
@@ -8,21 +9,21 @@ export default function StripsMenuBar() {
             <div className="dropdown">
                 <button className="dropbtn">Kategorie <img className='arrow' src={arrow} alt='arrow'></img></button>
                 <div className="dropdown-content">
-                    <a href="#">Owoce</a>
-                    <a href="#">Warzywa</a>
-                    <a href="#">Grzyby</a>
-                    <a href="#">Miody</a>
-                    <a href="#">Zboża</a>
+                    <Link to="#">Owoce</Link>
+                    <Link href="#">Warzywa</Link>
+                    <Link href="#">Grzyby</Link>
+                    <Link href="#">Miody</Link>
+                    <Link href="#">Zboża</Link>
                 </div>
             </div>
             <div className="dropdown">
                 <button className="dropbtn">Sortuj <img className='arrow' src={arrow} alt='arrow'></img></button>
                 <div className="dropdown-content">
-                    <a href="#">Popularność</a>
-                    <a href="#">Najnowsze</a>
-                    <a href="#">Najstarsze</a>
-                    <a href="#">Cena od najniższej</a>
-                    <a href="#">Cena od najwyższej</a>
+                    <Link href="#">Popularność</Link>
+                    <Link href="#">Najnowsze</Link>
+                    <Link href="#">Najstarsze</Link>
+                    <Link href="#">Cena od najniższej</Link>
+                    <Link href="#">Cena od najwyższej</Link>
 
                 </div>
             </div>

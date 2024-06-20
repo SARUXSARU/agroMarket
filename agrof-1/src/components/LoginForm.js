@@ -1,10 +1,15 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import closeIcon from './icons/closeIcon.png'
 import eyeIcon from './icons/eye.png'
-import Navbar from './Navbar';
+import axios from '../services/api.js';
+//import { UserContext } from '../contexts/UserContext.js';
+import { useUser } from '../contexts/UserContext.js';
 
-export default function LoginForm({ closeModal, handleLogin, openRegister}) {
 
+export default function LoginForm({ closeModal, handleLogin, openRegister }) {
+
+    const { setUser } = useUser();
+    //console.log("userContext: "+setUser)
 
     function showPassword() {
         var x = document.getElementById("password");
@@ -17,18 +22,41 @@ export default function LoginForm({ closeModal, handleLogin, openRegister}) {
 
     const handleLoginClick = () => {
         handleLogin();
-      };
+    };
 
-      const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const form = event.target;
         if (form.checkValidity()) {
-            handleLoginClick();
-            alert("Zalogowano pomyślnie");
-        } else {
+
+            // console.log("email" + form.email.value);
+            //console.log("authCode" + form.password.value);
+            const email = form.email.value;
+            const authCode = form.password.value;
+
+            try {
+                const response = await axios.post('/user/login',
+                    {
+                        email, authCode
+                    });
+                //console.log(response.data);
+
+                if (response.status === 200) {
+                    setUser(response.data.userDTO);
+                    console.log(response.data.userDTO);
+                    handleLoginClick();
+                    alert("Zalogowano pomyślnie");
+                } else {
+                    console.log("response: " + response.status)
+                    alert("Błędny email lub hasło");
+                }
+            } catch (error) {
+                console.error("Error logging in:", error);
+                alert("Błędy email lub hasło");
+            }
         }
     };
-  
+
     return (
         <form className='editUserBackground' id="login-form" onSubmit={handleSubmit}>
             <div className='editUserContainer'>
@@ -40,17 +68,17 @@ export default function LoginForm({ closeModal, handleLogin, openRegister}) {
                 </button>
                 <h1>Logowanie</h1>
                 <ul className='listEdit'>
-                <small className='smallText'>Email</small>
-                    <input type='email' className='loginRegisterInputField' placeholder='email' id="emial" required></input>
+                    <small className='smallText'>Email</small>
+                    <input type='email' className='loginRegisterInputField' placeholder='email' id="emial" name="email" required></input>
                     <div className="passwordInputContainer">
-                    <small className='smallText'>Hasło</small>
-                        <input type='password' className='loginRegisterInputField' placeholder='hasło' id="password" required></input>
+                        <small className='smallText'>Hasło</small>
+                        <input type='password' className='loginRegisterInputField' placeholder='hasło' id="password" name="authCode" required></input>
                         <span className='eyeButton' onMouseDown={showPassword} onMouseUp={showPassword}><img className='eyeButton' src={eyeIcon} alt="eyeIcon"></img></span>
                     </div>
                     <div className='loginRegisterButtonContainer'>
                         <input type='submit' className='loginRegisterButton' value={"Zaloguj się"} ></input>
-                        <text className='loginOrRegisterText'>nie masz konta?</text>
-                        <button type="button"className='loginRegisterButton' onClick={openRegister}>Zarejestruj się</button>
+                        <span className='loginOrRegisterText'>nie masz konta?</span>
+                        <button type="button" className='loginRegisterButton' onClick={openRegister}>Zarejestruj się</button>
                     </div>
                 </ul>
             </div>

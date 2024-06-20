@@ -11,6 +11,7 @@ import HomePage from './pages/HomePage';
 import UserPage from './pages/UserPage';
 import SearchResults from './pages/SearchResults';
 import AdPage from './pages/AdPage';
+import { UserProvider } from './contexts/UserContext.js';
 
 
 const router = createBrowserRouter([
@@ -19,23 +20,29 @@ const router = createBrowserRouter([
     element: <HomePage />
   },
   {
-    path:'/userPage',
-    element:<UserPage/>
+    path: '/userPage',
+    element: <UserPage />
   },
   {
-    path:'/searchResults',
-    element: <SearchResults/>
+    path: '/searchResults',
+    element: <SearchResults />
   },
   {
     path: 'adPage',
-    element: <AdPage/>
+    element: <AdPage />
   }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <UserProvider>
+    <RouterProvider router={router} >
+      
+        
+      
+    </RouterProvider>
+    </UserProvider>
   </React.StrictMode>
 
 

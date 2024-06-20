@@ -5,7 +5,7 @@ import PageInfoBar from '../components/PageInfoBar';
 
 
 
-function HomePage() {
+function HomePage(){
   document.title="AgroMarket - Ostatnio Dodane";
   return (
     <div className="HomePage">

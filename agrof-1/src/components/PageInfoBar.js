@@ -23,7 +23,7 @@ export default function PageInfoBar() {
   }
   return (
     <div>
-        <text className='page-info-text'>{text}</text>
+        <span className='page-info-text'>{text}</span>
     </div>
   )
 }

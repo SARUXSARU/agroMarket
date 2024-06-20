@@ -36,7 +36,5 @@ public class AdController {
         EditAdResponseDTO response = adService.editAd(adDTO, _id);
         return ResponseEntity.ok(response);
     }
-
-
 }
 
