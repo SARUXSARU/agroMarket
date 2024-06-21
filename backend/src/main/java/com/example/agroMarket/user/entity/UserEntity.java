@@ -22,6 +22,7 @@ public class UserEntity {
     private String firstName;
     private String lastName;
     private String email;
-//    private List<ObjectId> userAd;
-//    private List<ObjectId> favourite;
+    private String phoneNumber;
+    private List<ObjectId> userAd;
+    private List<ObjectId> favourite;
 }

@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
 import closeIcon from './icons/closeIcon.png'
 import eyeIcon from './icons/eye.png'
+import { useUser } from '../contexts/UserContext';
+import axios from '../services/api.js';
 
 export default function RegisterForm({ closeModal, openLogin, handleRegister }) {
 
+    const { setUser } = useUser();
+
+
     const handleRegisterClick = () => {
-        // Logika logowania...
         handleRegister();
     };
 
@@ -18,18 +22,65 @@ export default function RegisterForm({ closeModal, openLogin, handleRegister }) 
         }
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const form = event.target;
+
+        const password = form.password.value;
+        const passwordRepeat = form.repeatPassword.value;
+        const authCode = password;
+        const firstName = form.firstName.value;
+        const lastName = form.lastName.value;
+        const email = form.email.value;
+        const phoneNumber = form.phoneNumber.value;
+        const name = form.email.value;
+
         if (form.checkValidity()) {
-            handleRegisterClick();
-            alert("Witaj w AgroMarket.\nZarejestrowano pomyślnie ");
+            if (ifPasswordAreSame(password, passwordRepeat)) {
+
+                try {
+                    const response = await axios.post('/user/',
+                        {
+                            name, authCode, firstName, lastName, email, phoneNumber
+                        }
+                    );
+                    console.log("response: " + response.data);
+                    if (response.status === 200) {
+                        try {
+                            const getRegisteredResponse = await axios.post('/user/login', { email, authCode });
+                            console.log("getregisered data: " + getRegisteredResponse.data);
+                            if (getRegisteredResponse.status === 200) {
+                                setUser(getRegisteredResponse.data.userDTO);
+                            }
+                        } catch (error) {
+                            console.log("something went wrong");
+                        }
+                        handleRegisterClick();
+                        alert("Witaj w AgroMarket.\nZarejestrowano pomyślnie ");
+                    } else {
+                        console.log("response: " + response.status + " " + response.data)
+                        alert("Błąd rejestracji");
+                    }
+                } catch (error) {
+                    console.error("Error register: ", error);
+                    alert("Rejestracja nie powiodła się");
+                }
+            }
         } else {
         }
     };
 
+    function ifPasswordAreSame(password, passwordRepeat) {
+        if (password === passwordRepeat) {
+            return true;
+        } else {
+            alert("Hasła nie są takie same");
+            return false;
+        }
+    }
+
     return (
-        <form className='editUserBackground' onSubmit={handleSubmit}>
+        <form className='editUserBackground' id="registerForm" onSubmit={handleSubmit}>
             <div className='editUserContainer'>
                 <button onClick={() =>
                     closeModal(false)}
@@ -40,18 +91,18 @@ export default function RegisterForm({ closeModal, openLogin, handleRegister }) 
                 <h1>Rejestracja</h1>
                 <ul className='listEdit'>
                     <small className='smallText'>Imię</small>
-                    <input type='text' className='loginRegisterInputField' placeholder='Jan' required></input>
+                    <input type='text' className='loginRegisterInputField' placeholder='Jan' name="firstName" required></input>
                     <small className='smallText'>Nazwisko</small>
-                    <input type='text' className='loginRegisterInputField' placeholder='Kowalski' required></input>
+                    <input type='text' className='loginRegisterInputField' placeholder='Kowalski' name="lastName" required></input>
                     <small className='smallText'>Numer tel. (np. 123-123-123)</small>
-                    <input type='tel' className='loginRegisterInputField' maxLength={11} placeholder='123-123-123' pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" required></input>
+                    <input type='tel' className='loginRegisterInputField' maxLength={11} placeholder='123-123-123' pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" name="phoneNumber" required></input>
                     <small className='smallText'>Email</small>
-                    <input type='email' className='loginRegisterInputField' placeholder='email@gmail.com' required></input>
+                    <input type='email' className='loginRegisterInputField' placeholder='email@gmail.com' name="email" required></input>
                     <div className="passwordInputContainer">
                         <small className='smallText'>Hasło</small>
-                        <input type='password' className='loginRegisterInputField' placeholder='hasło' id="password" required></input>
+                        <input type='password' className='loginRegisterInputField' placeholder='hasło' id="password" name="password" required></input>
                         <small className='smallText'>Powtórz hasło</small>
-                        <input type='password' className='loginRegisterInputField' placeholder='powtórz hasło' id="password" required></input>
+                        <input type='password' className='loginRegisterInputField' placeholder='powtórz hasło' name="repeatPassword" id="repeatPassword" required></input>
                     </div>
                     <div className='loginRegisterButtonContainer'>
                         <input type="submit" className='loginRegisterButton' value={"Zarejestruj sie"} id="register"></input>

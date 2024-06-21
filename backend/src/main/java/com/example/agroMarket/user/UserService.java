@@ -15,7 +15,7 @@ public class UserService {
     private UserRepository userRepository;
 
     public AddUserResponseDTO addUser(UserDTO userDTO) {
-        UserEntity userEntity = new UserEntity(null, userDTO.getName(), userDTO.getAuthCode(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail());
+        UserEntity userEntity = new UserEntity(null, userDTO.getName(), userDTO.getAuthCode(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(), userDTO.getPhoneNumber(),null,null);
         if (userRepository.findUserEntityByEmailOrName(userDTO.getEmail(), userDTO.getName()).isPresent()) {
             throw new UserWithThisNameExistException("Already exist user with this name or email");
         }
@@ -25,14 +25,14 @@ public class UserService {
 
     public GetUserResponseDTO getUser(ObjectId _id) {
         UserEntity userEntity = userRepository.findUserEntityBy_id(_id).orElseThrow(() -> new WrongUserID("There is no user with this _id"));
-        UserDTO userDTO = new UserDTO(userEntity.getName(), userEntity.getAuthCode(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getEmail());
+        UserDTO userDTO = new UserDTO(userEntity.getName(), userEntity.getAuthCode(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getEmail(), userEntity.getPhoneNumber(), userEntity.getUserAd(),userEntity.getFavourite());
         return new GetUserResponseDTO(userDTO, "ok", HttpStatus.OK);
     }
 
 
     public CheckIfUserResponseDTO checkIfUser(UserLoginDTO userLoginDTO){
         UserEntity userEntity=userRepository.findUserEntityByEmailAndAuthCode(userLoginDTO.getEmail(), userLoginDTO.getAuthCode()).orElseThrow(() -> new WrongUserID("Email or password is wrong"));
-        UserDTO userDTO = new UserDTO(userEntity.getName(), userEntity.getAuthCode(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getEmail());
+        UserDTO userDTO = new UserDTO(userEntity.getName(), userEntity.getAuthCode(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getEmail(), userEntity.getPhoneNumber(), userEntity.getUserAd(),userEntity.getFavourite());
         return new CheckIfUserResponseDTO(userDTO, "ok", HttpStatus.OK);
     }
 
@@ -50,6 +50,9 @@ public class UserService {
         userEntity.setFirstName(userEntity.getFirstName());
         userEntity.setLastName(userEntity.getLastName());
         userEntity.setEmail(userDTO.getEmail());
+        userEntity.setPhoneNumber((userDTO.getPhoneNumber()));
+        userEntity.setUserAd((userDTO.getUserAd()));
+        userEntity.setFavourite((userDTO.getFavourite()));
         userRepository.save(userEntity);
         return new PutUserResponseDTO("User updated", HttpStatus.OK);
     }
