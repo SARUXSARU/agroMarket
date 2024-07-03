@@ -23,7 +23,7 @@ public class UserService {
         return new AddUserResponseDTO("ok", HttpStatus.ACCEPTED);
     }
 
-    public GetUserResponseDTO getUser(ObjectId _id) {
+    public GetUserResponseDTO getUser(String _id) {
         UserEntity userEntity = userRepository.findUserEntityBy_id(_id).orElseThrow(() -> new WrongUserID("There is no user with this _id"));
         UserDTO userDTO = new UserDTO(userEntity.getName(), userEntity.getAuthCode(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getEmail(), userEntity.getPhoneNumber(), userEntity.getUserAd(),userEntity.getFavourite());
         return new GetUserResponseDTO(userDTO, "ok", HttpStatus.OK);
@@ -33,7 +33,9 @@ public class UserService {
     public CheckIfUserResponseDTO checkIfUser(UserLoginDTO userLoginDTO){
         UserEntity userEntity=userRepository.findUserEntityByEmailAndAuthCode(userLoginDTO.getEmail(), userLoginDTO.getAuthCode()).orElseThrow(() -> new WrongUserID("Email or password is wrong"));
         UserDTO userDTO = new UserDTO(userEntity.getName(), userEntity.getAuthCode(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getEmail(), userEntity.getPhoneNumber(), userEntity.getUserAd(),userEntity.getFavourite());
-        return new CheckIfUserResponseDTO(userDTO, "ok", HttpStatus.OK);
+        String _id= String.valueOf(userEntity.get_id());
+        System.out.println("her moje id:  "+_id);
+        return new CheckIfUserResponseDTO(userDTO, _id, "ok", HttpStatus.OK);
     }
 
 
@@ -46,11 +48,12 @@ public class UserService {
 
     public PutUserResponseDTO putUser(UserDTO userDTO, ObjectId _id) {
         UserEntity userEntity = userRepository.findUserEntityBy_id(_id).orElseThrow(() -> new WrongUserID("There is no user with this _id"));
-        userEntity.setName(userDTO.getName());
-        userEntity.setFirstName(userEntity.getFirstName());
-        userEntity.setLastName(userEntity.getLastName());
-        userEntity.setEmail(userDTO.getEmail());
-        userEntity.setPhoneNumber((userDTO.getPhoneNumber()));
+        userEntity.setName(userDTO.getName() != null ? userDTO.getName() : userEntity.getName());
+
+        userEntity.setFirstName(userDTO.getFirstName() != null ? userDTO.getName() : userEntity.getFirstName());
+        userEntity.setLastName(userDTO.getLastName() != null ? userDTO.getLastName() : userEntity.getLastName());
+        userEntity.setEmail(userDTO.getEmail() != null ? userDTO.getEmail() : userEntity.getEmail());
+        userEntity.setPhoneNumber(userDTO.getPhoneNumber() != null ? userDTO.getPhoneNumber() : userEntity.getPhoneNumber());
         userEntity.setUserAd((userDTO.getUserAd()));
         userEntity.setFavourite((userDTO.getFavourite()));
         userRepository.save(userEntity);

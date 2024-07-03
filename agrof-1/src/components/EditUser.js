@@ -2,35 +2,59 @@ import React from 'react'
 import closeIcon from './icons/closeIcon.png'
 import { useUser } from '../contexts/UserContext';
 import axios from '../services/api';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import userEvent from '@testing-library/user-event';
 
-export default function EditUser({ closeModal }) {
+export default function EditUser({ closeModal}) {
 
-    const {setUser} = useUser();
+    const {user} = useUser();
+    const [userData, setUserData] = useState(null);
+
+    useEffect(() => {
+        if (user) {
+          const fetchUserData = async () => {
+            try {
+              const response = await axios.get(`/user/${user}`);
+              if (response.status === 200) {
+                setUserData(response.data.userDTO);
+                console.log(response.data.userDTO.authCode+" "+response.data.userDTO.firstName+" "+response.data.userDTO.lastName+" "+response.data.userDTO.email+" "+response.data.userDTO.phoneNumber);
+        
+
+                
+              }
+            } catch (error) {
+              console.error("Error fetching user data:", error);
+            }
+          };
+    
+          fetchUserData();
+        }
+      }, [user]);
 
 
     const handleSubmit = async (event) => {
-        console.log(useUser.firstName)
         event.preventDefault();
         const form = event.target;
-        const name=form.name.value;
-        const authCode=setUser.authCode;
+        
+        const authCode=userData.authCode;
         const firstName=form.firstName.value;
         const lastName=form.lastName.value;
-        const email=form.email.lastName;
-        const phoneNumber=form.phoneNumber.phoneNumber;
+        const email=form.email.value;
+        const phoneNumber=form.phoneNumber.value;
 
-
-//////// wrong cos we need to give id to get person or we have
-        //or we have to change find by on backend (may be find by email
-        //cos we have unique email for each user)
+        console.log(authCode+" "+firstName+" "+lastName+" "+email+" "+phoneNumber);
         
         if (form.checkValidity()) {
             try{
-                const response = await axios.post('/user/email',{
-                    name, authCode, firstName, lastName, email, phoneNumber
+                console.log("/user/"+user)
+                const response = await axios.put(`/user/${user}`,{
+                    firstName, lastName, email, phoneNumber
                 });
                 if(response.status===200){
-                    closeModal()
+               
+                    closeModal();
+                        
                     
                     alert("Dane zostały zaktualizowane");
                    
@@ -38,14 +62,18 @@ export default function EditUser({ closeModal }) {
                     alert("Dane nie zostały zaktualizowane!");
                 }
             }catch( error){
-                console.log("first name: "+useUser.firstName);
                 console.log("Smth went wwrong: "+error)
             }
         } else {
         }
     };
 
+    
+
     return (
+
+        
+
         <form className='editUserBackground' onSubmit={handleSubmit}>
             <div className='editUserContainer'>
                 <button onClick={() =>
@@ -57,13 +85,13 @@ export default function EditUser({ closeModal }) {
                 <h1>Edytuj swoje dane</h1>
                 <ul className='listEdit'>
                     <small className='smallText'>Imię</small>
-                    <input type='text' id="name" className='editType' defaultValue={useUser.firstName} placeholder='Imię' required></input>
+                    <input type='text' name="firstName" className='editType' defaultValue={userData?.firstName} placeholder='Imię' required></input>
                     <small className='smallText'>Nazwisko</small>
-                    <input type='text' id="surname" className='editType' defaultValue={useUser.lastName} placeholder='Nazwisko' required></input>
+                    <input type='text' name="lastName" className='editType' defaultValue={userData?.lastName} placeholder='Nazwisko' required></input>
                     <small className='smallText'>email</small>
-                    <input type='email' id="email" className='editType' defaultValue="email@gmail.com" placeholder='email' required></input>
+                    <input type='email' name="email" className='editType' defaultValue={userData?.email} placeholder='email' required></input>
                     <small className='smallText'>Numer tel. (np. 123-123-123)</small>
-                    <input type='tel' id="tel" className='editType' defaultValue="123-456-789" maxLength={11} placeholder='123-123-123' pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" required></input>
+                    <input type='tel' name="phoneNumber" className='editType' defaultValue={userData?.phoneNumber} maxLength={11} placeholder='123-123-123' pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" required></input>
                 </ul>
                 <div className='editButtons'>
                     <button className='editButton'>Edytuj</button>

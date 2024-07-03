@@ -50,10 +50,12 @@ export default function RegisterForm({ closeModal, openLogin, handleRegister }) 
                             const getRegisteredResponse = await axios.post('/user/login', { email, authCode });
                             console.log("getregisered data: " + getRegisteredResponse.data);
                             if (getRegisteredResponse.status === 200) {
-                                setUser(getRegisteredResponse.data.userDTO);
+                                
+                                setUser(getRegisteredResponse.data._id);
+                                console.log("ID: "+getRegisteredResponse.data._id);
                             }
                         } catch (error) {
-                            console.log("something went wrong");
+                            console.log("nie udało sie zalogowac na konto pomimo rejestracji");
                         }
                         handleRegisterClick();
                         alert("Witaj w AgroMarket.\nZarejestrowano pomyślnie ");
@@ -108,7 +110,6 @@ export default function RegisterForm({ closeModal, openLogin, handleRegister }) 
                         <input type="submit" className='loginRegisterButton' value={"Zarejestruj sie"} id="register"></input>
                         <span className='loginOrRegisterText'>masz już konto?</span>
                         <button type="button" className='loginRegisterButton' onClick={openLogin}>Zaloguj się</button>
-
 
                     </div>
                 </ul>

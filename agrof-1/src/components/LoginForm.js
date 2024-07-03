@@ -36,8 +36,15 @@ export default function LoginForm({ closeModal, handleLogin, openRegister }) {
                         email, authCode
                     });
                 if (response.status === 200) {
-                    setUser(response.data.userDTO);
-                    console.log(response.data.userDTO);
+                    //setUser(response.data.userDTO);
+                    //console.log(response.data.userDTO);
+
+                    //console.log("ID: "+response.data._id);
+                    
+                    setUser(response.data._id);
+                    localStorage.setItem('user',JSON.stringify(response.data._id));
+                    console.log(localStorage.getItem('user'))
+                    
                     handleLoginClick();
                     alert("Zalogowano pomyślnie");
                 } else {

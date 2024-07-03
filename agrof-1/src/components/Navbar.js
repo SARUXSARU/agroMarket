@@ -43,6 +43,7 @@ export default function Navbar() {
     setIsLoggedIn(false);
     localStorage.setItem('isLoggedIn', false);
     window.location.href = '/';
+    localStorage.clear();
     alert("Wylogowano pomyślnie");
   };
 
@@ -61,7 +62,7 @@ export default function Navbar() {
   };
 
   function renderUserIcon() {
-    if (isLoggedIn == true && location.pathname === '/userPage')
+    if (isLoggedIn === true && location.pathname === '/userPage')
       return (
         <div className='logoutUserContainer'>
 
@@ -69,7 +70,7 @@ export default function Navbar() {
           <button className='logoutButton' onClick={handleLogout}>Wyloguj się</button>
         </div>
       )
-    else if (isLoggedIn == true)
+    else if (isLoggedIn === true)
       return (
         <div className='logoutUserContainer'>
           <Link to='/userPage' className='profil-icon' ></Link>

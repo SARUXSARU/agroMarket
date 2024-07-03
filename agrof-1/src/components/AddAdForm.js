@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react'
 import closeIcon from './icons/closeIcon.png'
 import imageIcon from './icons/image.png'
+import { useUser } from '../contexts/UserContext.js'
+import axios from '../services/api.js'
 
 
 export default function AddAd({ closeModal }) {
@@ -32,9 +34,15 @@ export default function AddAd({ closeModal }) {
         }
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const form = event.target;
+
+        const image = form.image;
+        const tittle = form.tittle;
+        const price = form.price;
+        const description = form.description;
+
         if (form.checkValidity()) {
             closeModal()
             alert("Pomyślnie dodano ogłoszenie");
@@ -64,15 +72,15 @@ export default function AddAd({ closeModal }) {
 
 
                     </div>
-                    <input ref={inputRef} className='imgInput' accept="image/*" type="file" onChange={convertToBase64}></input>
+                    <input ref={inputRef} className='imgInput' accept="image/*" type="file" onChange={convertToBase64} name="image"></input>
                     <small className='smallText'>Tytuł</small>
-                    <input type='text' className='editType' placeholder='Tytuł ogłoszenia' required></input>
+                    <input type='text' className='editType' placeholder='Tytuł ogłoszenia' name="tittle" required ></input>
                     <small className='smallText'>Cena (zł)</small>
-                    <input type='number' className='editType' placeholder='Cena' step=".01" required></input>
+                    <input type='number' className='editType' placeholder='Cena' step=".01" name="price" required></input>
                     <small className='smallText'>Opis</small>
                     <textarea type='text' maxLength={350} onChange={handleDescriptionChange}
                         className='descriptionType' value={description} placeholder='Opis'
-                        required>
+                        name="description" required>
 
                     </textarea>
                     <span className='charLimiter'>{350 - description.length}/350</span>
