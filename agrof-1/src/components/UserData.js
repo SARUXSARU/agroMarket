@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useUser } from '../contexts/UserContext';
 import axios from '../services/api.js';
 
 export default function UserData({ handleEditClick }) {
-  const { user } = useUser();
   const [userData, setUserData] = useState(null);
 
   const fetchUser = async () => {

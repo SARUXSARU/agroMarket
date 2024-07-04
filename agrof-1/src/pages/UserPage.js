@@ -8,17 +8,15 @@ import UserList from '../components/UserList';
 import UserData from '../components/UserData';
 import EditUser from '../components/EditUser';
 import AddAdForm from '../components/AddAdForm';
-import LoginForm from '../components/LoginForm';
-import RegisterForm from '../components/RegisterForm';
 
 
 export default function UserPage() {
   document.title = "Twoje konto";
-  const [selectedMenuItem, setSelectedMenuItem] = useState('userData'); // Początkowo wybieramy menu z ogłoszeniami
+  const [selectedMenuItem, setSelectedMenuItem] = useState('userData');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [fetchUser, setFetchUser] = useState(null);
-  
+
 
   const handleMenuClick = (menuItem) => {
     setSelectedMenuItem(menuItem);
@@ -51,13 +49,13 @@ export default function UserPage() {
         {selectedMenuItem === 'userData' ? (
           <UserData handleEditClick={handleEditClick} />
         ) : (
-          <UserList selectedMenuItem={selectedMenuItem}/>
+          <UserList selectedMenuItem={selectedMenuItem} />
         )}
 
       </div>
       {isEditModalOpen && (
         <div className='modal-background' >
-          <EditUser closeModal={handleEditModalClose} fetchUser={fetchUser}/>
+          <EditUser closeModal={handleEditModalClose} fetchUser={fetchUser} />
         </div>
       )}
 

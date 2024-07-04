@@ -1,76 +1,67 @@
 import React from 'react'
 import closeIcon from './icons/closeIcon.png'
-import { useUser } from '../contexts/UserContext';
 import axios from '../services/api';
 import { useEffect } from 'react';
 import { useState } from 'react';
 
-export default function EditUser({ closeModal, fetchUser}) {
+export default function EditUser({ closeModal, fetchUser }) {
 
-    const {user} = useUser();
     const [userData, setUserData] = useState(null);
-    const id=JSON.parse(localStorage.getItem('user_id'));
+    const id = JSON.parse(localStorage.getItem('user_id'));
 
     useEffect(() => {
         if (id) {
-          const fetchUserData = async () => {
-            try {
-              const response = await axios.get(`/user/${id}`);
-              if (response.status === 200) {
-                setUserData(response.data.userDTO);
-                console.log(response.data.userDTO.authCode+" "+response.data.userDTO.firstName+" "+response.data.userDTO.lastName+" "+response.data.userDTO.email+" "+response.data.userDTO.phoneNumber);
-        
-
-                
-              }
-            } catch (error) {
-              console.error("Error fetching user data:", error);
-            }
-          };
-    
-          fetchUserData();
+            const fetchUserData = async () => {
+                try {
+                    const response = await axios.get(`/user/${id}`);
+                    if (response.status === 200) {
+                        setUserData(response.data.userDTO);
+                        console.log(response.data.userDTO.authCode + " " + response.data.userDTO.firstName + " " + response.data.userDTO.lastName + " " + response.data.userDTO.email + " " + response.data.userDTO.phoneNumber);
+                    }
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                }
+            };
+            fetchUserData();
         }
-      }, [user]);
+    }, []);
 
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         const form = event.target;
-        
-        const firstName=form.firstName.value;
-        const lastName=form.lastName.value;
-        const email=form.email.value;
-        const phoneNumber=form.phoneNumber.value;
 
-        console.log(firstName+" "+lastName+" "+email+" "+phoneNumber);
-        
+        const firstName = form.firstName.value;
+        const lastName = form.lastName.value;
+        const email = form.email.value;
+        const phoneNumber = form.phoneNumber.value;
+        console.log(firstName + " " + lastName + " " + email + " " + phoneNumber);
+
         if (form.checkValidity()) {
-            try{
-                console.log("/user/"+id)
-                const response = await axios.put(`/user/${id}`,{
+            try {
+                console.log("/user/" + id)
+                const response = await axios.put(`/user/${id}`, {
                     firstName, lastName, email, phoneNumber
                 });
-                if(response.status===200){
-                    
+                if (response.status === 200) {
                     closeModal();
                     alert("Dane zostały zaktualizowane");
                     fetchUser();
-                   
-                }else{
+                } else {
                     alert("Dane nie zostały zaktualizowane!");
                 }
-            }catch(error){
-                console.log("Smth went wwrong: "+error)
+            } catch (error) {
+                console.log("Smth went wwrong: " + error)
             }
         } else {
         }
     };
 
-    
+
 
     return (
 
-        
+
 
         <form className='editUserBackground' onSubmit={handleSubmit}>
             <div className='editUserContainer'>

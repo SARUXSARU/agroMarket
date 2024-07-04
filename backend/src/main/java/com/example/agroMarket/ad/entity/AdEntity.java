@@ -19,6 +19,7 @@ public class AdEntity {
     private List<String> images;
     private int category; // min 1 max 5 (owoce/warzywa/zboża/miody/grzyby)
     private String description; // max length 350
+    private String user_id;
 
 
 }

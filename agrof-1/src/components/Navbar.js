@@ -9,8 +9,6 @@ import { Link, useLocation } from 'react-router-dom'
 import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
-const api = "http://localhost:8080/api/v1/"
 
 
 export default function Navbar() {

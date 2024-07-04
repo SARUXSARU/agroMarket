@@ -1,9 +1,6 @@
 package com.example.agroMarket.ad.dto;
 
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -12,15 +9,21 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class AdDTO {
+    @NotBlank
     @Size(min = 2)
     private String title;
+    @NotBlank
     @DecimalMin("0.0")
     private double price;
     @Size(max = 3)
     private List<String> images;
+    @NotBlank
     @Min(1)
     @Max(5)
     private int category; //
+    @NotBlank
     @Size(min = 5, max = 350)
     private String description; // max length 350
+    @NotBlank
+    private String user_id;
 }

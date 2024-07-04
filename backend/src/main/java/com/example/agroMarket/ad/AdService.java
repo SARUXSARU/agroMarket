@@ -18,14 +18,14 @@ public class AdService {
     private AdRepository adRepository;
 
     public AddAdResponseDTO addAd(AdDTO adDTO) {
-        AdEntity adEntity = new AdEntity(null, adDTO.getTitle(), adDTO.getPrice(), adDTO.getImages(), adDTO.getCategory(), adDTO.getDescription());
+        AdEntity adEntity = new AdEntity(null, adDTO.getTitle(), adDTO.getPrice(), adDTO.getImages(), adDTO.getCategory(), adDTO.getDescription(), adDTO.getUser_id());
         adRepository.save(adEntity);
         return new AddAdResponseDTO("ok", HttpStatus.ACCEPTED);
     }
 
     public GetAdResponseDTO getAd(ObjectId _id) {
         AdEntity adEntity = adRepository.findAdEntityBy_id(_id).orElseThrow(() -> new WrongAdID("There is no ad with this _id"));
-        AdDTO adDTO = new AdDTO(adEntity.getTitle(), adEntity.getPrice(), adEntity.getImages(), adEntity.getCategory(), adEntity.getDescription());
+        AdDTO adDTO = new AdDTO(adEntity.getTitle(), adEntity.getPrice(), adEntity.getImages(), adEntity.getCategory(), adEntity.getDescription(), adEntity.getUser_id());
         return new GetAdResponseDTO(adDTO, "ok", HttpStatus.OK);
     }
 
@@ -37,11 +37,13 @@ public class AdService {
 
     public EditAdResponseDTO editAd(AdDTO adDTO, ObjectId _id) {
         AdEntity adEntity = adRepository.findAdEntityBy_id(_id).orElseThrow(() -> new WrongAdID("There is no ad with this _id"));
-        adEntity.setTitle(adEntity.getTitle());
-        adEntity.setPrice(adEntity.getPrice());
-        adEntity.setImages(adEntity.getImages());
-        adEntity.setCategory(adDTO.getCategory());
-        adEntity.setDescription(adDTO.getDescription());
+        adEntity.setTitle(adDTO.getTitle() != null ? adDTO.getTitle() : adEntity.getTitle());
+        adEntity.setPrice(adDTO.getPrice() != null ? adDTO.getPrice() : adEntity.getPrice());
+        adEntity.setCategory(adDTO.getCategory() != null ? adDTO.getCategory() : adEntity.getCategory());
+        adEntity.setDescription(adDTO.getDescription() != null ? adDTO.getDescription() : adEntity.getDescription());
+        adEntity.setUser_id(adDTO.getUser_id() != null ? adDTO.getUser_id() : adEntity.getUser_id());
+
+
         adRepository.save(adEntity);
         return new EditAdResponseDTO("Ad edited", HttpStatus.OK);
     }

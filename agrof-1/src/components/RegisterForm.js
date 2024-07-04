@@ -1,26 +1,23 @@
-import React, { useState } from 'react'
+import React from 'react'
 import closeIcon from './icons/closeIcon.png'
-import eyeIcon from './icons/eye.png'
-import { useUser } from '../contexts/UserContext';
 import axios from '../services/api.js';
 
 export default function RegisterForm({ closeModal, openLogin, handleRegister }) {
 
-    const { setUser } = useUser();
 
 
     const handleRegisterClick = () => {
         handleRegister();
     };
 
-    function myFunction() {
-        var x = document.getElementById("password");
-        if (x.type === "password") {
-            x.type = "text";
-        } else {
-            x.type = "password";
-        }
-    }
+    // function myFunction() {
+    //     var x = document.getElementById("password");
+    //     if (x.type === "password") {
+    //         x.type = "text";
+    //     } else {
+    //         x.type = "password";
+    //     }
+    // }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -37,7 +34,6 @@ export default function RegisterForm({ closeModal, openLogin, handleRegister }) 
 
         if (form.checkValidity()) {
             if (ifPasswordAreSame(password, passwordRepeat)) {
-
                 try {
                     const response = await axios.post('/user/',
                         {

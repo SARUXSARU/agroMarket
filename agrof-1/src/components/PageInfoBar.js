@@ -13,30 +13,28 @@ export default function PageInfoBar() {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-      if (user) {
-        const fetchUserData = async () => {
-          try {
-            const response = await axios.get(`/user/${user}`);
-            if (response.status === 200) {
-              setUserData(response.data.userDTO);
-              
-            }
-          } catch (error) {
-            console.error("Error fetching user data:", error);
+    if (user) {
+      const fetchUserData = async () => {
+        try {
+          const response = await axios.get(`/user/${user}`);
+          if (response.status === 200) {
+            setUserData(response.data.userDTO);
           }
-        };
-  
-        fetchUserData();
-      }
-    }, [user]);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      };
+      fetchUserData();
+    }
+  }, [user]);
 
 
-  const ifLoggedIn = () =>{
-    var name="";
-    if(!user){
+  const ifLoggedIn = () => {
+    var name = "";
+    if (!user) {
       return name;
-    }else if(user){
-      return " "+userData.firstName;
+    } else if (user) {
+      return " " + userData.firstName;
     }
   }
 
@@ -45,7 +43,7 @@ export default function PageInfoBar() {
       text = 'Ostatnio Dodane';
       break;
     case '/userPage':
-      text = 'Witaj' +  "!";
+      text = 'Witaj!';
       break;
     case '/searchResults':
       text = 'Wyniki Wyszukiwania';
