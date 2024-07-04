@@ -48,9 +48,9 @@ public class UserService {
 
     public PutUserResponseDTO putUser(UserDTO userDTO, ObjectId _id) {
         UserEntity userEntity = userRepository.findUserEntityBy_id(_id).orElseThrow(() -> new WrongUserID("There is no user with this _id"));
-        userEntity.setName(userDTO.getName() != null ? userDTO.getName() : userEntity.getName());
 
-        userEntity.setFirstName(userDTO.getFirstName() != null ? userDTO.getName() : userEntity.getFirstName());
+//        userEntity.setName(userDTO.getName() != null ? userDTO.getName() : userEntity.getName());
+        userEntity.setFirstName(userDTO.getFirstName() != null ? userDTO.getFirstName() : userEntity.getFirstName());
         userEntity.setLastName(userDTO.getLastName() != null ? userDTO.getLastName() : userEntity.getLastName());
         userEntity.setEmail(userDTO.getEmail() != null ? userDTO.getEmail() : userEntity.getEmail());
         userEntity.setPhoneNumber(userDTO.getPhoneNumber() != null ? userDTO.getPhoneNumber() : userEntity.getPhoneNumber());

@@ -4,18 +4,18 @@ import { useUser } from '../contexts/UserContext';
 import axios from '../services/api';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import userEvent from '@testing-library/user-event';
 
-export default function EditUser({ closeModal}) {
+export default function EditUser({ closeModal, fetchUser}) {
 
     const {user} = useUser();
     const [userData, setUserData] = useState(null);
+    const id=JSON.parse(localStorage.getItem('user_id'));
 
     useEffect(() => {
-        if (user) {
+        if (id) {
           const fetchUserData = async () => {
             try {
-              const response = await axios.get(`/user/${user}`);
+              const response = await axios.get(`/user/${id}`);
               if (response.status === 200) {
                 setUserData(response.data.userDTO);
                 console.log(response.data.userDTO.authCode+" "+response.data.userDTO.firstName+" "+response.data.userDTO.lastName+" "+response.data.userDTO.email+" "+response.data.userDTO.phoneNumber);
@@ -37,31 +37,29 @@ export default function EditUser({ closeModal}) {
         event.preventDefault();
         const form = event.target;
         
-        const authCode=userData.authCode;
         const firstName=form.firstName.value;
         const lastName=form.lastName.value;
         const email=form.email.value;
         const phoneNumber=form.phoneNumber.value;
 
-        console.log(authCode+" "+firstName+" "+lastName+" "+email+" "+phoneNumber);
+        console.log(firstName+" "+lastName+" "+email+" "+phoneNumber);
         
         if (form.checkValidity()) {
             try{
-                console.log("/user/"+user)
-                const response = await axios.put(`/user/${user}`,{
+                console.log("/user/"+id)
+                const response = await axios.put(`/user/${id}`,{
                     firstName, lastName, email, phoneNumber
                 });
                 if(response.status===200){
-               
-                    closeModal();
-                        
                     
+                    closeModal();
                     alert("Dane zostały zaktualizowane");
+                    fetchUser();
                    
                 }else{
                     alert("Dane nie zostały zaktualizowane!");
                 }
-            }catch( error){
+            }catch(error){
                 console.log("Smth went wwrong: "+error)
             }
         } else {

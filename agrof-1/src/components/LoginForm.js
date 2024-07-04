@@ -1,13 +1,13 @@
-import React, { useContext, useState } from 'react'
+import React from 'react'
 import closeIcon from './icons/closeIcon.png'
 import eyeIcon from './icons/eye.png'
 import axios from '../services/api.js';
-import { useUser } from '../contexts/UserContext.js';
+// import { useUser } from '../contexts/UserContext.js';
 
 
 export default function LoginForm({ closeModal, handleLogin, openRegister }) {
 
-    const { setUser } = useUser();
+   // const { setUser } = useUser();
 
     function showPassword() {
         var x = document.getElementById("password");
@@ -36,13 +36,7 @@ export default function LoginForm({ closeModal, handleLogin, openRegister }) {
                         email, authCode
                     });
                 if (response.status === 200) {
-                    //setUser(response.data.userDTO);
-                    //console.log(response.data.userDTO);
-
-                    //console.log("ID: "+response.data._id);
-                    
-                    setUser(response.data._id);
-                    localStorage.setItem('user',JSON.stringify(response.data._id));
+                    localStorage.setItem('user_id',JSON.stringify(response.data._id));
                     console.log(localStorage.getItem('user'))
                     
                     handleLoginClick();

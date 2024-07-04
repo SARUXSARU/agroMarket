@@ -17,13 +17,15 @@ export default function UserPage() {
   const [selectedMenuItem, setSelectedMenuItem] = useState('userData'); // Początkowo wybieramy menu z ogłoszeniami
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [fetchUser, setFetchUser] = useState(null);
   
 
   const handleMenuClick = (menuItem) => {
     setSelectedMenuItem(menuItem);
   };
 
-  const handleEditClick = () => {
+  const handleEditClick = (fetchUserFunction) => {
+    setFetchUser(() => fetchUserFunction);
     setIsEditModalOpen(true);
   };
 
@@ -47,7 +49,7 @@ export default function UserPage() {
       <div className='userInfo'>
         <UserMenu handleMenuClick={handleMenuClick} handleAddButtonClick={handleAddButtonClick}></UserMenu>
         {selectedMenuItem === 'userData' ? (
-          <UserData handleEditClick={handleEditClick} /> // Wyświetlamy dane użytkownika
+          <UserData handleEditClick={handleEditClick} />
         ) : (
           <UserList selectedMenuItem={selectedMenuItem}/>
         )}
@@ -55,7 +57,7 @@ export default function UserPage() {
       </div>
       {isEditModalOpen && (
         <div className='modal-background' >
-          <EditUser closeModal={handleEditModalClose}/>
+          <EditUser closeModal={handleEditModalClose} fetchUser={fetchUser}/>
         </div>
       )}
 

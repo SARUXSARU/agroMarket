@@ -50,9 +50,7 @@ export default function RegisterForm({ closeModal, openLogin, handleRegister }) 
                             const getRegisteredResponse = await axios.post('/user/login', { email, authCode });
                             console.log("getregisered data: " + getRegisteredResponse.data);
                             if (getRegisteredResponse.status === 200) {
-                                
-                                setUser(getRegisteredResponse.data._id);
-                                console.log("ID: "+getRegisteredResponse.data._id);
+                                localStorage.setItem('user_id',JSON.stringify(getRegisteredResponse.data._id));
                             }
                         } catch (error) {
                             console.log("nie udało sie zalogowac na konto pomimo rejestracji");
