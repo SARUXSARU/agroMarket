@@ -17,23 +17,15 @@ export default function AddAd({ closeModal }) {
     };
 
     function convertToBase64(e) {
-        console.log("to jest e: "+e);
         var reader = new FileReader();
         reader.readAsDataURL(e.target.files[0]);
         reader.onload = () => {
-            console.log(reader.result);
             setImage(reader.result);
-           // imageToSend=image;
-            //console.log(reader.result);
         };
         reader.onerror = error => {
             console.log("Error: ", error);
         };
     }
-
-    
-    
-   
 
     const handleDescriptionChange = (e) => {
         const inputText = e.target.value;
@@ -45,15 +37,9 @@ export default function AddAd({ closeModal }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
         const form = event.target;
-
-        if(!image){
-
-            console.log(image);
-        }
-        
-        console.log("image: "+image);
-        const tittle = form.tittle.value;
+       const title = form.title.value;
         const price = form.price.value;
         const description = form.description.value;
         const category=form.category.value;
@@ -62,12 +48,11 @@ export default function AddAd({ closeModal }) {
         if (form.checkValidity()) {
             try{
                 const response = await axios.post('/ad/',{
-                    tittle, price, image, category, description, user_id
+                    title, price, image, category, description, user_id
                 });
-                //console.log("response: "+response.data);
                 if(response.status===200){
-                    closeModal();
                     alert("Pomyślnie dodano ogłoszenie");
+                    closeModal();
                 }
             }catch(error){
                 console.log("add ad error "+error);
@@ -75,43 +60,6 @@ export default function AddAd({ closeModal }) {
         }else{
         }
     };
-
-    // const handleSubmit = async (event) => {
-    //     event.preventDefault();
-    //     setIsSubmitting(true);
-    // };
-
-    // useEffect(() => {
-    //     const submitForm = async () => {
-    //         if (!isSubmitting || !image) return;
-
-    //         const form = document.querySelector('.editUserBackground form');
-    //         const tittle = form.tittle.value;
-    //         const price = form.price.value;
-    //         const description = form.description.value;
-    //         const category = form.category.value;
-    //         const user_id = JSON.parse(localStorage.getItem('user_id'));
-            
-
-    //         if (form.checkValidity()) {
-    //             try {
-    //                 const response = await axios.post('/ad/', {
-    //                     tittle, price, image, category, description, user_id
-    //                 });
-    //                 if (response.status === 200) {
-    //                     closeModal();
-    //                     alert("Pomyślnie dodano ogłoszenie");
-    //                 }
-    //             } catch (error) {
-    //                 console.log("add ad error " + error);
-    //             }
-    //         }
-
-    //         setIsSubmitting(false);
-    //     };
-
-    //     submitForm();
-    // }, [isSubmitting, image, closeModal]);
 
     return (
         <form className='editUserBackground' onSubmit={handleSubmit} >
@@ -127,7 +75,7 @@ export default function AddAd({ closeModal }) {
                     <small className='smallText'>Dodaj zdjęcie</small>
                     <div className='imgContainer'>
                         {image ? (
-                            <img width={300} height={300} src={image} alt="Uploaded Image" name="image"/>
+                            <img width={300} height={300} src={image} alt={image} name="image"/>
                         ) : (
                             <img onClick={handleImageClick} width={100} height={100}
                                 src={imageIcon} alt="Default Image" style={{ cursor: 'pointer' }} />
@@ -137,7 +85,7 @@ export default function AddAd({ closeModal }) {
                     </div>
                     <input ref={inputRef} className='imgInput' accept="image/*" type="file" onChange={convertToBase64} name="image"></input>
                     <small className='smallText'>Tytuł</small>
-                    <input type='text' className='editType' placeholder='Tytuł ogłoszenia' name="tittle" required ></input>
+                    <input type='text' className='editType' placeholder='Tytuł ogłoszenia' name="title" required ></input>
                     <small className='smallText'>Cena (zł)</small>
                     <input type='number' className='editType' placeholder='Cena' step=".01" name="price" required></input>
                     <small className='smallText'>Kategoria</small>

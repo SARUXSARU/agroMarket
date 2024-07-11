@@ -9,30 +9,34 @@ import org.bson.types.ObjectId;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
 @Service
 public class UserService {
     private UserRepository userRepository;
-
+// todo favourite as object id i think
     public AddUserResponseDTO addUser(UserDTO userDTO) {
-        UserEntity userEntity = new UserEntity(null, userDTO.getName(), userDTO.getAuthCode(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(), userDTO.getPhoneNumber(),null,null);
-        if (userRepository.findUserEntityByEmailOrName(userDTO.getEmail(), userDTO.getName()).isPresent()) {
+        List<String> userAds=new ArrayList<>();
+        List<String> userFavourite=new ArrayList<>();
+        UserEntity userEntity = new UserEntity(null, userDTO.getAuthCode(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(), userDTO.getPhoneNumber(),userAds,userFavourite);
+        if (userRepository.findUserEntityByEmail(userDTO.getEmail()).isPresent()) {
             throw new UserWithThisNameExistException("Already exist user with this name or email");
         }
         userRepository.save(userEntity);
         return new AddUserResponseDTO("ok", HttpStatus.ACCEPTED);
     }
-
     public GetUserResponseDTO getUser(String _id) {
         UserEntity userEntity = userRepository.findUserEntityBy_id(_id).orElseThrow(() -> new WrongUserID("There is no user with this _id"));
-        UserDTO userDTO = new UserDTO(userEntity.getName(), userEntity.getAuthCode(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getEmail(), userEntity.getPhoneNumber(), userEntity.getUserAd(),userEntity.getFavourite());
+        UserDTO userDTO = new UserDTO( userEntity.getAuthCode(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getEmail(), userEntity.getPhoneNumber(), userEntity.getUserAd(),userEntity.getFavourite());
         return new GetUserResponseDTO(userDTO, "ok", HttpStatus.OK);
     }
 
 
     public CheckIfUserResponseDTO checkIfUser(UserLoginDTO userLoginDTO){
         UserEntity userEntity=userRepository.findUserEntityByEmailAndAuthCode(userLoginDTO.getEmail(), userLoginDTO.getAuthCode()).orElseThrow(() -> new WrongUserID("Email or password is wrong"));
-        UserDTO userDTO = new UserDTO(userEntity.getName(), userEntity.getAuthCode(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getEmail(), userEntity.getPhoneNumber(), userEntity.getUserAd(),userEntity.getFavourite());
+        UserDTO userDTO = new UserDTO( userEntity.getAuthCode(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getEmail(), userEntity.getPhoneNumber(), userEntity.getUserAd(),userEntity.getFavourite());
         String _id= String.valueOf(userEntity.get_id());
         System.out.println("her moje id:  "+_id);
         return new CheckIfUserResponseDTO(userDTO, _id, "ok", HttpStatus.OK);

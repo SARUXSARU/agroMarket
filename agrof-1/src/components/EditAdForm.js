@@ -37,6 +37,8 @@ export default function EditAdForm({ closeModal }) {
         event.preventDefault();
         const form = event.target;
         if (form.checkValidity()) {
+
+            
             closeModal()
             alert("Pomyślnie zaktualizowano ogłoszenie");
         } else {

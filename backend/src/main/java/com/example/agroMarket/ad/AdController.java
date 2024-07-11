@@ -25,6 +25,12 @@ public class AdController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/")
+    ResponseEntity<GetAdsIdsDTO> getAds(){
+        GetAdsIdsDTO response= adService.getAds();
+        return ResponseEntity.ok(response);
+    }
+
     @DeleteMapping("/{_id}")
     ResponseEntity<DeleteAdResponseDTO> deleteAd(@PathVariable ObjectId _id) {
         DeleteAdResponseDTO response = adService.deleteAd(_id);

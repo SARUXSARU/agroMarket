@@ -16,7 +16,7 @@ public class AdEntity {
     private ObjectId _id;
     private String title;
     private double price;
-    private List<String> images;
+    private String image;
     private int category; // min 1 max 5 (owoce/warzywa/zboża/miody/grzyby)
     private String description; // max length 350
     private String user_id;

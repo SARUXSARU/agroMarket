@@ -1,10 +1,7 @@
 import React, { useState } from 'react'
-
-import wheat from './icons/wheat.png'
 import heart from './icons/heart.png'
 import heartRed from './icons/heartRed.png'
 import { Link, useLocation } from 'react-router-dom'
-import AddAd from './AddAdForm'
 import EditAdForm from './EditAdForm'
 
 
@@ -47,7 +44,7 @@ export default function AdListElement({title,price,adLocation,image,category,sel
         <div className='ad'>
             <Link to='/adPage' className='ad-click'>
                 <div className='ad-div-img'>
-                    <img className='ad-img' alt="marchew" src={require("./../components/icons/" + image)}></img>
+                    <img className='ad-img' alt="marchew" src={image}></img>
                 </div>
                 <div className='ad-div-details'>
                     <div className='ad-div-header'>
@@ -57,7 +54,6 @@ export default function AdListElement({title,price,adLocation,image,category,sel
                             <img src={isLiked ? heartRed : heart} alt='Like' style={{ width: '20px', height: '20px' }} />  
                         </button>
                         {renderEditAdButton()}
-                        
                     </div>
                     <span className='ad-price'>{price}</span>
                     <span className='ad-location'>{adLocation}</span>
@@ -69,8 +65,6 @@ export default function AdListElement({title,price,adLocation,image,category,sel
                             <EditAdForm closeModal={handleEditAdFormClose}></EditAdForm>
                         </div>
                     )}
-
-
         </div>
 
 

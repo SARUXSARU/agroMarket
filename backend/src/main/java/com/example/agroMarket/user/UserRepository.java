@@ -14,9 +14,11 @@ public interface UserRepository extends MongoRepository<UserEntity, String> {
 
     void deleteUserEntityBy_id(ObjectId _id);
 
-    Optional<Object> findUserEntityByEmailOrName(String email, String name);
+    Optional<Object> findUserEntityByEmail(String email);
 
     String getUser_idByEmail(String email);
 
     Optional<UserEntity> findUserEntityBy_id(String id);
+
+
 }

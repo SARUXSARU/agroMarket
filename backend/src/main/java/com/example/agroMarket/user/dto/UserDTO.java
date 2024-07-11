@@ -16,7 +16,7 @@ public class UserDTO {
 
 
    // @NotBlank(message = "type nick name")
-    private String name;
+  //  private String name;
     @NotBlank(message = "type passsword")
     private String authCode;
     @NotBlank(message = "type first name")
@@ -29,6 +29,6 @@ public class UserDTO {
     @NotBlank(message = "enter phone number")
     @Pattern(regexp = "^\\d{3}-\\d{3}-\\d{3}$", message = "phone number is not valid")
     private String phoneNumber;
-    private List<ObjectId> userAd;
-    private List<ObjectId> favourite;
+    private List<String> userAd;
+    private List<String> favourite;
 }

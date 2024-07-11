@@ -15,12 +15,11 @@ public class AdDTO {
     @NotBlank
     @DecimalMin("0.0")
     private double price;
-    @Size(max = 3)
-    private List<String> images;
+    private String image;
     @NotBlank
     @Min(1)
     @Max(5)
-    private int category; //
+    private int category;
     @NotBlank
     @Size(min = 5, max = 350)
     private String description; // max length 350

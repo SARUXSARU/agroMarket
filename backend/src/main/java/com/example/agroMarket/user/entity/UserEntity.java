@@ -17,12 +17,12 @@ import java.util.List;
 public class UserEntity {
     @Id
     private ObjectId _id;
-    private String name;
+   // private String name;
     private String authCode;
     private String firstName;
     private String lastName;
     private String email;
     private String phoneNumber;
-    private List<ObjectId> userAd;
-    private List<ObjectId> favourite;
+    private List<String> userAd;
+    private List<String> favourite;
 }
