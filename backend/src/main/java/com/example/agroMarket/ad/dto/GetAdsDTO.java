@@ -9,7 +9,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Data
-public class GetAdsIdsDTO {
+public class GetAdsDTO {
     private List<AdEntity> adsList;
     private String message;
     private HttpStatus httpStatus;
