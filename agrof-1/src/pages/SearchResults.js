@@ -9,6 +9,9 @@ import StripsMenuBar from '../components/StripsMenuBar';
 
 export default function SearchResults() {
     document.title="Wyniki wyszukiwania"
+    const queryParams=new URLSearchParams(window.location.search);
+    const param=queryParams.get('query');
+    console.log("MY pram: " + param)
   return (
     
     <div className='SearchResults'>

@@ -95,6 +95,10 @@ export default function Navbar() {
 
   }
 
+  const [search, setSearch]= useState('');
+  const handleInputChange = (event) => {
+    setSearch(event.target.value);
+  }
 
 
   const renderSearchBar = () => {
@@ -103,8 +107,8 @@ export default function Navbar() {
     } else
       return (
         <form className='navbar-form'>
-          <input type='text' className='navbar-search-bar' placeholder="wyszukaj produkt..."></input>
-          <Link to="/searchResults" style={{ textDecoration: 'none' }}>
+          <input type='search' name="searchValue" className='navbar-search-bar' onChange={handleInputChange} placeholder="wyszukaj produkt..."></input>
+          <Link to={`/searchResults?query=${search}`} style={{ textDecoration: 'none' }}>
             <button className='navbar-search-button' >Szukaj</button>
           </Link>
         </form>

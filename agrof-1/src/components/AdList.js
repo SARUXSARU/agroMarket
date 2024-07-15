@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { Ad } from '../classes/Ad';
 import axiosInstance from '../services/api';
 
+
 export default function AdList({ selectedMenuItem }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -64,6 +65,21 @@ export default function AdList({ selectedMenuItem }) {
     //   }
     // }
 
+    // function searchForTitle(param,title){
+
+    //   let findingFor=toString(param).toLowerCase;
+    //   let iHave=toString(title).toLowerCase;
+
+    //   if(findingFor.includes(iHave)){
+    //     return true;
+    //   }else{
+    //     false;
+    //   }
+
+      
+
+    // }
+
     const fetchData = async () => {
       try {
         const response = await axiosInstance.get(`/ad/`);
@@ -80,7 +96,50 @@ export default function AdList({ selectedMenuItem }) {
                 updatedAds.push(new Ad(_id, element.title, element.price, element.description, element.title, element.image, element.category));
               }
             });
-          } else {
+          } else if(location.pathname.includes('/searchResults')){
+           console.log(window.location.search)
+           const queryParams=new URLSearchParams(window.location.search);
+           const param=queryParams.get('query')
+            if(param===''){
+              adsList.forEach((element, index) => {
+                const _id = adsIds[index];
+                updatedAds.push(new Ad(_id, element.title, element.price, element.description, element.title, element.image, element.category));
+              });
+            }else{
+              const normalizeAndSort = (str) => {
+                return str.toLowerCase().split(' ').sort().join(' ');
+            };
+            
+            // Funkcja do sprawdzenia, czy wszystkie słowa z param są obecne w title
+            const wordsContained = (param, title) => {
+                const paramWords = param.toLowerCase().split(' ');
+                const titleWords = title.toLowerCase().split(' ');
+            
+                return paramWords.every(word => titleWords.includes(word));
+            };
+            
+            adsList.forEach((element, index) => {
+                const normalizedParam = param.toLowerCase();
+                const normalizedTitle = element.title.toLowerCase();
+            
+                // Sprawdzenie, czy param zawiera się w tytule lub tytuł zawiera się w param
+                const containsCheck = normalizedParam.includes(normalizedTitle) || normalizedTitle.includes(normalizedParam);
+            
+                // Sprawdzenie, czy tytuły zawierają te same słowa, niezależnie od kolejności
+                const wordsMatchCheck = normalizeAndSort(param) === normalizeAndSort(element.title);
+            
+                // Sprawdzenie, czy wszystkie słowa z param są obecne w tytule
+                const wordsContainedCheck = wordsContained(param, element.title);
+            
+                if (containsCheck || wordsMatchCheck || wordsContainedCheck) {
+                    const _id = adsIds[index];
+                    updatedAds.push(new Ad(_id, element.title, element.price, element.description, element.title, element.image, element.category));
+                }
+            });
+            }
+
+          }
+          else {
             adsList.forEach((element, index) => {
               const _id = adsIds[index];
               updatedAds.push(new Ad(_id, element.title, element.price, element.description, element.title, element.image, element.category));
