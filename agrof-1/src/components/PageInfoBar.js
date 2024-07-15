@@ -52,7 +52,7 @@ export default function PageInfoBar() {
       text = '';
       break;
     default:
-      text = 'Nie wiem gdzie jesteśmy';
+      text = '';
   }
   return (
     <div>

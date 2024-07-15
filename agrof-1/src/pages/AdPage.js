@@ -11,6 +11,8 @@ import PageInfoBar from '../components/PageInfoBar';
 import DescriptionField from '../components/DescriptionField';
 import PriceField from '../components/PriceField';
 import axios from '../services/api.js';
+import { useLocation, useParams } from 'react-router-dom';
+
 
 
 let initSlides = [
@@ -28,11 +30,16 @@ const containerStyles = {
 export default function AdPage() {
 
    const [slides, setSlides] = useState(initSlides);
+   const { _id } = useParams();
+
+   console.log(_id);
+
 
   useEffect(() => {
     const fetchAd = async () => {
       try {
-        const response = await axios.get(`/ad/668ba5666f9f2851637278a4`);
+        
+        const response = await axios.get(`/ad/${_id}`);
         if (response.status === 200) {
           const updatedSlides = [...initSlides]; // Copy the initial slides
           updatedSlides[0].url=response.data.adDTO.image;
@@ -53,10 +60,10 @@ export default function AdPage() {
       <PageInfoBar></PageInfoBar>
       <div className='img-price'>
         <ImgSlider slides={slides}></ImgSlider>
-        <PriceField></PriceField>
+        <PriceField _id={_id}></PriceField>
       </div>
       <div className='description-map'>
-        <DescriptionField></DescriptionField>
+        <DescriptionField _id={_id}></DescriptionField>
       </div>
     </div>
   )

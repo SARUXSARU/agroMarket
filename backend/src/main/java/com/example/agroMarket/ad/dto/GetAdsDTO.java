@@ -11,6 +11,7 @@ import java.util.List;
 @Data
 public class GetAdsDTO {
     private List<AdEntity> adsList;
+    private List<String> adsIds;
     private String message;
     private HttpStatus httpStatus;
 

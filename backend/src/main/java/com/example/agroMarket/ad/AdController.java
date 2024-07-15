@@ -26,8 +26,8 @@ public class AdController {
     }
 
     @GetMapping("/")
-    ResponseEntity<GetAdsIdsDTO> getAds(){
-        GetAdsIdsDTO response= adService.getAds();
+    ResponseEntity<GetAdsDTO> getAds(){
+        GetAdsDTO response= adService.getAds();
         return ResponseEntity.ok(response);
     }
 
@@ -37,7 +37,7 @@ public class AdController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/{_id}")
+    @PutMapping("/{_id}")
     ResponseEntity<EditAdResponseDTO> editAd(@RequestBody AdDTO adDTO, @PathVariable ObjectId _id) {
         EditAdResponseDTO response = adService.editAd(adDTO, _id);
         return ResponseEntity.ok(response);

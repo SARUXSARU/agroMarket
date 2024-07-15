@@ -52,6 +52,7 @@ public class AdService {
         AdEntity adEntity = adRepository.findAdEntityBy_id(_id).orElseThrow(() -> new WrongAdID("There is no ad with this _id"));
         adEntity.setTitle(adDTO.getTitle() != null ? adDTO.getTitle() : adEntity.getTitle());
         adEntity.setPrice(adDTO.getPrice() != 0 ? adDTO.getPrice() : adEntity.getPrice());
+        adEntity.setImage(adDTO.getImage() != null ? adDTO.getImage() : adEntity.getImage());
         adEntity.setCategory(adDTO.getCategory() !=0 ? adDTO.getCategory() : adEntity.getCategory());
         adEntity.setDescription(adDTO.getDescription() != null ? adDTO.getDescription() : adEntity.getDescription());
         adEntity.setUser_id(adDTO.getUser_id() != null ? adDTO.getUser_id() : adEntity.getUser_id());
@@ -61,9 +62,17 @@ public class AdService {
         return new EditAdResponseDTO("Ad edited", HttpStatus.OK);
     }
 
-    public GetAdsIdsDTO getAds(){
+    public GetAdsDTO getAds(){
         List<AdEntity> adsList= new ArrayList<>();
-        adsList.addAll(adRepository.findAll());
-        return new GetAdsIdsDTO(adsList,"Number of ads ok", HttpStatus.OK);
+        List<String> adsIds=new ArrayList<>();
+       //adsList.addAll(adRepository.findAll());
+
+        adRepository.findAll().forEach(adEntity -> adsList.add(adEntity));
+
+        for (AdEntity adEntity : adsList) {
+            //System.out.println(adEntity.get_id());
+            adsIds.add(String.valueOf(adEntity.get_id()));
+        }
+        return new GetAdsDTO(adsList,adsIds, "Number of ads ok", HttpStatus.OK);
     }
 }

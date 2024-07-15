@@ -5,42 +5,42 @@ import heartRed from './icons/heartRed.png';
 import { useUser } from '../contexts/UserContext';
 import axiosInstance from '../services/api';
 
-export default function PriceField() {
+export default function PriceField({ _id }) {
 
-    const [title , setTitle]= useState('');
-    const [price, setPrice]= useState();
+    const [title, setTitle] = useState('');
+    const [price, setPrice] = useState();
     const [firstLastName, setFirstLastName] = useState('');
-    const [phone, setPhone]=useState('');
-    const [homeAdress,setHomeAdress]=useState(''); //todo!!!!!!
-    
+    const [phone, setPhone] = useState('');
+    const [homeAdress, setHomeAdress] = useState(''); //todo!!!!!!
 
-    useEffect(() =>{
+
+    useEffect(() => {
         const fetchAdData = async () => {
-            try{
-                const response= await axiosInstance.get('/ad/668ba5666f9f2851637278a4')
-                if(response.status===200){
-                  try{  
-                    const adOwnerResponse= await axiosInstance.get(`/user/${response.data.adDTO.user_id}`);
-                    if(adOwnerResponse.status===200){
-                        setTitle(response.data.adDTO.title);
-                        setPrice(response.data.adDTO.price);
-                        setFirstLastName(adOwnerResponse.data.userDTO.firstName+" "+adOwnerResponse.data.userDTO.lastName);
-                        setPhone(adOwnerResponse.data.userDTO.phoneNumber);
-                    }else{
-                        console.log("can't get adOwner");
+            try {
+                const response = await axiosInstance.get(`/ad/${_id}`)
+                if (response.status === 200) {
+                    try {
+                        const adOwnerResponse = await axiosInstance.get(`/user/${response.data.adDTO.user_id}`);
+                        if (adOwnerResponse.status === 200) {
+                            setTitle(response.data.adDTO.title);
+                            setPrice(response.data.adDTO.price);
+                            setFirstLastName(adOwnerResponse.data.userDTO.firstName + " " + adOwnerResponse.data.userDTO.lastName);
+                            setPhone(adOwnerResponse.data.userDTO.phoneNumber);
+                        } else {
+                            console.log("can't get adOwner");
+                        }
+                    } catch (error) {
+                        console.log("fetch adOwner error: " + error);
                     }
-                }catch(error){
-                    console.log("fetch adOwner error: "+error);
-                }
-                }else{
+                } else {
                     console.log("can't get this ad ...")
                 }
-            }catch(error){
-                console.log("fetch price ad data: "+error);
+            } catch (error) {
+                console.log("fetch price ad data: " + error);
             }
         }
         fetchAdData();
-    },[]);
+    }, []);
 
     const { user } = useUser();
     const [isLiked, setIsLiked] = useState(false);
@@ -51,8 +51,13 @@ export default function PriceField() {
     };
 
     const maskData = (data) => {
-        if (!data) return "";
-        return data.charAt(0) + "*".repeat(data.length - 1);
+        if (!localStorage.getItem('user_id')){
+            if (!data) return "";
+            return data.charAt(0) + "*".repeat(data.length - 1);
+        }else{
+            return data;
+        }
+           
     };
 
     //const isUserLoggedIn = localStorage.getItem('user');
@@ -70,8 +75,8 @@ export default function PriceField() {
                 </button>
             </div>
             <div className="price-cena"> {price} zł </div>
-            <div className='price-user-imie'>{firstLastName}</div>
-            <div className='price-user-tel'>tel. {phone}</div>
+            <div className='price-user-imie'>{maskData(firstLastName)}</div>
+            <div className='price-user-tel'>tel. {maskData(phone)}</div>
             {/* <div className='price-user-address'>{address}</div> */}
         </div>
     );

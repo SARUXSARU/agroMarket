@@ -7,11 +7,9 @@ export default function UserData({ handleEditClick }) {
   const fetchUser = async () => {
     try {
       const id = JSON.parse(localStorage.getItem('user_id'));
-      console.log("ID: " + id);
       const response = await axios.get(`/user/${id}`);
       if (response.status === 200) {
         setUserData(response.data.userDTO);
-        console.log("all is ok");
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -20,7 +18,6 @@ export default function UserData({ handleEditClick }) {
 
   useEffect(() => {
     if (localStorage.getItem('user_id')) {
-      console.log("zaciongam");
       fetchUser();
     }
   },[]);

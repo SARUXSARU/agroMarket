@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import axios from '../services/api.js'
 
-export default function DescriptionField() {
+export default function DescriptionField({_id}) {
     const [adDescription,setAdDescription] = useState('');
 
     useEffect(() =>{
         const fetchAdData = async () => {
             try{
-                const response = await axios.get('/ad/668ba5666f9f2851637278a4');
+                const response = await axios.get(`/ad/${_id}`);
                 if(response.status===200){
                     console.log("AD description: "+response.data.adDTO.description);
                     setAdDescription(response.data.adDTO.description);

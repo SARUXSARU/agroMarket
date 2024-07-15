@@ -28,7 +28,7 @@ const router = createBrowserRouter([
     element: <SearchResults />
   },
   {
-    path: 'adPage',
+    path: '/adPage/:_id',
     element: <AdPage />
   }
 ]);

@@ -7,6 +7,7 @@ import axiosInstance from '../services/api';
 export default function AdList({ selectedMenuItem }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  let [ads, setAds] = useState([]);
   let itemsPerPage = 8;
   const location = useLocation();
   const categoryFilter = location.state?.category;
@@ -25,49 +26,82 @@ export default function AdList({ selectedMenuItem }) {
   // <AdListElement selectedMenuItem={selectedMenuItem}/>, <AdListElement />, <AdListElement selectedMenuItem={selectedMenuItem}/>, <AdListElement selectedMenuItem={selectedMenuItem}/>,
   // <AdListElement selectedMenuItem={selectedMenuItem}/>, <AdListElement />, <AdListElement selectedMenuItem={selectedMenuItem}/>, <AdListElement selectedMenuItem={selectedMenuItem}/>,
   // <AdListElement selectedMenuItem={selectedMenuItem}/>, <AdListElement />, <AdListElement selectedMenuItem={selectedMenuItem}/>, <AdListElement selectedMenuItem={selectedMenuItem}/>];
-  let [ads, setAds] = useState([
+  
 
-  ]);
+  
 
-  useEffect(() => {
-    if (location.state && location.state.category) {
-      setSelectedCategory(location.state.category);
-    }
+    // const fetchData = async () => {
+    //   try {
+    //     const response = await axiosInstance.get(`/ad/`);
+
+    //     if (response.status === 200) {
+    //       const updatedAds = [...ads];
+    //      const adsList = response.data.adsList;
+    //       const adsIds = response.data.adsIds;
+    //       if (location.pathname === '/userPage') {
+    //         if (updatedAds.length === 0) {
+    //           response.data.adsList.forEach((element, index) => {
+    //             if (JSON.parse(localStorage.getItem('user_id')) === element.user_id) {
+    //               const _id=adsIds[index];
+    //               updatedAds.push(new Ad(_id, element.title, element.price,element.description, element.title, element.image, element.category))
+    //             }
+    //           });
+    //         }
+    //       } else {
+    //         if (updatedAds.length === 0) {
+    //           adsList.forEach((element, index) => {
+    //             const _id = adsIds[index];
+    //             updatedAds.push(new Ad(_id, element.title, element.price, element.description, element.title, element.image, element.category));
+    //           });
+    //         }
+
+    //       }
+    //       console.log(updatedAds);
+    //       setAds(updatedAds);
+    //     }
+    //   } catch (error) {
+    //     console.log("fetch ads to list error: " + error);
+    //   }
+    // }
 
     const fetchData = async () => {
-
-
       try {
         const response = await axiosInstance.get(`/ad/`);
-
+    
         if (response.status === 200) {
-          const updatedAds = [...ads];
-          const existingAdIds = new Set(updatedAds.map(ad => ad.id));
+          const adsList = response.data.adsList;
+          const adsIds = response.data.adsIds;
+          let updatedAds = [];
+    
           if (location.pathname === '/userPage') {
-            if(updatedAds.length===0)
-            response.data.adsList.forEach(element => {
+            adsList.forEach((element, index) => {
               if (JSON.parse(localStorage.getItem('user_id')) === element.user_id) {
-                updatedAds.push(new Ad(element.title, element.price, element.title, element.image, element.category))
+                const _id = adsIds[index];
+                updatedAds.push(new Ad(_id, element.title, element.price, element.description, element.title, element.image, element.category));
               }
             });
           } else {
-            console.log("all ogloszenia")
-            //console.log(updatedAds);
-            if(updatedAds.length===0)
-            response.data.adsList.forEach(element => {
-              updatedAds.push(new Ad(element.title, element.price, element.title, element.image, element.category));
+            adsList.forEach((element, index) => {
+              const _id = adsIds[index];
+              updatedAds.push(new Ad(_id, element.title, element.price, element.description, element.title, element.image, element.category));
             });
           }
+          console.log(updatedAds);
           setAds(updatedAds);
         }
       } catch (error) {
         console.log("fetch ads to list error: " + error);
       }
-    }
-    fetchData();
-  }, [location]);
+    };
+  
 
-
+    useEffect(() => {
+      if (location.state && location.state.category) {
+        setSelectedCategory(location.state.category);
+      }
+  
+      fetchData();
+    }, [location]);
 
 
 
@@ -101,14 +135,19 @@ export default function AdList({ selectedMenuItem }) {
       <ul className="four-per-row-list">
         {currentItems.map((ad, index) => (
           <li key={index} className="list-item">
-            <AdListElement title={ad.title}
+            {console.log("przekazane _id:"+ad._id)}
+            <AdListElement 
+              _id={ad._id}
+              title={ad.title}
               price={ad.price}
+              description={ad.description}
               adLocation={ad.adLocation}
               image={ad.image}
               category={ad.category}
               selectedMenuItem={selectedMenuItem}
+              fetchData={fetchData}
             />
-            {console.log("Tytuł: " + ad.title)}
+
           </li>
         ))}
       </ul>
@@ -125,11 +164,15 @@ export default function AdList({ selectedMenuItem }) {
         {currentItems.map((ad, index) => (
           <li key={index} className="list-item">
             <AdListElement
+              _id={ad._id}
               title={ad.title}
               price={ad.price}
+              description={ad.description}
               adLocation={ad.adLocation}
               image={ad.image}
-              selectedMenuItem={selectedMenuItem} />
+              selectedMenuItem={selectedMenuItem}
+              fetchData={fetchData}
+              />
           </li>
         ))}
       </ul>

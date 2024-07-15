@@ -1,17 +1,34 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import closeIcon from './icons/closeIcon.png'
 import imageIcon from './icons/image.png'
 import wheat from './icons/Marchew.webp';
+import axiosInstance from '../services/api';
 
 
-export default function EditAdForm({ closeModal }) {
-    const [image, setImage] = useState("");
-    const [description, setDescription] = useState("");
+export default function EditAdForm({ adData, closeModal, fetchData }) {
+    let [image, setImage] = useState(adData ? adData.image : "");
+    let [title, setTitle] = useState(adData ? adData.title : "");
+    let [price, setPrice] = useState(adData ? adData.price : "");
+    let [description, setDescription] = useState(adData ? adData.description : "");
+    const [_id, setId] = useState(adData ? adData._id : "");
     const inputRef = useRef(null);
+    const id = JSON.parse(localStorage.getItem('user_id'));
+
 
     const handleImageClick = () => {
         inputRef.current.click();
     };
+
+    useEffect(() => {
+
+        if (adData && id) {
+            setImage(adData.image);
+            setTitle(adData.title);
+            setPrice(adData.price);
+            setDescription(adData.description);
+        }
+    }, [adData]);
+
 
     function convertToBase64(e) {
         var reader = new FileReader();
@@ -33,20 +50,41 @@ export default function EditAdForm({ closeModal }) {
         }
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const form = event.target;
         if (form.checkValidity()) {
 
+            const title = form.title.value;
+            const price = form.price.value;
+            const description = form.description.value;
+
+            try {
+                const response = await axiosInstance.put(`/ad/${_id}`,{
+                    title,price,image, description
+                });
+                
+                if (response.status === 200) {
+                    console.log("poszol")
+                    alert("Pomyślnie zaktualizowano ogłoszenie");
+                    fetchData();
+                    closeModal();
+                }
+            } catch (error) {
+                console.log("put ad data error: " + error)
+            }
             
-            closeModal()
-            alert("Pomyślnie zaktualizowano ogłoszenie");
+            
+            
+            
         } else {
         }
     };
 
     return (
+
         <form className='editUserBackground' onSubmit={handleSubmit}>
+
             <div className='editUserContainer'>
                 <button onClick={() =>
                     closeModal(false)}
@@ -67,19 +105,24 @@ export default function EditAdForm({ closeModal }) {
 
 
                     </div>
-                    <input ref={inputRef} className='imgInput' accept="image/*" type="file" onChange={convertToBase64} ></input>
+                    <input ref={inputRef} name='image' className='imgInput' accept="image/*" type="file" onChange={convertToBase64} ></input>
                     <small className='smallText'>Tytuł</small>
-                    <input type='text' className='editType' placeholder='Tytuł ogłoszenia' defaultValue={"Marchew"} required></input>
+                    <input type='text' name='title' className='editType' placeholder='Tytuł ogłoszenia' defaultValue={title} required></input>
                     <small className='smallText' >Cena (zł)</small>
-                    <input type='number' className='editType' placeholder='Cena' step=".01"  defaultValue={18} required></input>
+                    <input type='number' name='price' className='editType' placeholder='Cena' step=".01" defaultValue={price} required></input>
                     <small className='smallText'>Opis</small>
-                    <textarea type='text' maxLength={350} onChange={handleDescriptionChange}
-                        className='descriptionType' value="Sprzedam marchew nie płukaną. Podana cena za worek 15kg. Odbiór osobisty. Proszę o telefon przed przyjazdem. Nie odpowiadam na SMS.
-                   " placeholder='Opis'
-                         required>
-
-                    </textarea>
+                    <textarea
+                        type='text'
+                        name='description'
+                        maxLength={350}
+                        onChange={handleDescriptionChange}
+                        className='descriptionType'
+                        defaultValue={description}
+                        placeholder='Opis'
+                        required
+                    ></textarea>
                     <span className='charLimiter'>{350 - description.length}/350</span>
+
                 </ul>
                 <div className='editButtons'>
                     <input type="submit" className='editButton' value={"Edytuj"}></input>
