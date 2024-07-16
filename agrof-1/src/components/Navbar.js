@@ -95,7 +95,7 @@ export default function Navbar() {
 
   }
 
-  const [search, setSearch]= useState('');
+  const [search, setSearch] = useState('');
   const handleInputChange = (event) => {
     setSearch(event.target.value);
   }
@@ -107,7 +107,7 @@ export default function Navbar() {
     } else
       return (
         <form className='navbar-form'>
-          <input type='search' name="searchValue" className='navbar-search-bar' onChange={handleInputChange} placeholder="wyszukaj produkt..."></input>
+          <input type='search' name="searchValue" className='navbar-search-bar' onChange={handleInputChange} placeholder="wyszukaj produkt..." defaultValue={new URLSearchParams(window.location.search).get('query')}></input>
           <Link to={`/searchResults?query=${search}`} style={{ textDecoration: 'none' }}>
             <button className='navbar-search-button' >Szukaj</button>
           </Link>
@@ -119,56 +119,56 @@ export default function Navbar() {
     if (location.pathname === '/')
       return (
         <div className='navbar-categories'>
-          <Link to='/searchResults' >
-            <div className='navbar-category'>
-              <button className='navbar-fruit-button'  >
-                <img className='fruit-category-icon' src={fruit} alt='fruit' />
-              </button>
-              <span className='navbar-category-text'>
-                Owoce
-              </span>
-            </div>
-          </Link>
-          <Link to='/searchResults' >
-            <div className='navbar-category' onClick={() => handleCategoryClick(2)}>
-              <button className='navbar-fruit-button' >
-                <img className='fruit-category-icon' src={vegetable} alt='vegetable' />
-              </button>
-              <span className='navbar-category-text'>
-                Warzywa
-              </span>
-            </div>
-          </Link>
-          <Link to='/searchResults' >
-            <div className='navbar-category' >
-              <button className='navbar-fruit-button' >
-                <img className='fruit-category-icon' src={mushroom} alt='mushroom' />
-              </button>
-              <span className='navbar-category-text'>
-                Grzyby
-              </span>
-            </div>
-          </Link>
-          <Link to='/searchResults' >
-            <div className='navbar-category' >
-              <button className='navbar-fruit-button' >
-                <img className='fruit-category-icon' src={honey} alt='honey' />
-              </button>
-              <span className='navbar-category-text'>
-                Miody
-              </span>
-            </div>
-          </Link>
-          <Link to='/searchResults' >
-            <div className='navbar-category' >
-              <button className='navbar-fruit-button' >
-                <img className='fruit-category-icon' src={wheat} alt='wheat' />
-              </button>
-              <span className='navbar-category-text'>
-                Zboża
-              </span>
-            </div>
-          </Link>
+          {/* // <Link to='/searchResults' > */}
+          <div className='navbar-category' onClick={() => handleCategoryClick(1)}>
+            <button className='navbar-fruit-button'  >
+              <img className='fruit-category-icon' src={fruit} alt='fruit' />
+            </button>
+            <span className='navbar-category-text'>
+              Owoce
+            </span>
+          </div>
+          {/* // </Link> */}
+          {/* <Link to='/searchResults' > */}
+          <div className='navbar-category' onClick={() => handleCategoryClick(2)}>
+            <button className='navbar-fruit-button' >
+              <img className='fruit-category-icon' src={vegetable} alt='vegetable' />
+            </button>
+            <span className='navbar-category-text'>
+              Warzywa
+            </span>
+          </div>
+          {/* </Link>
+          <Link to='/searchResults' > */}
+          <div className='navbar-category' onClick={() => handleCategoryClick(3)}>
+            <button className='navbar-fruit-button' >
+              <img className='fruit-category-icon' src={mushroom} alt='mushroom' />
+            </button>
+            <span className='navbar-category-text'>
+              Grzyby
+            </span>
+          </div>
+          {/* </Link>
+          <Link to='/searchResults' > */}
+          <div className='navbar-category' onClick={() => handleCategoryClick(4)}>
+            <button className='navbar-fruit-button' >
+              <img className='fruit-category-icon' src={honey} alt='honey' />
+            </button>
+            <span className='navbar-category-text'>
+              Miody
+            </span>
+          </div>
+          {/* </Link>
+          <Link to='/searchResults' > */}
+          <div className='navbar-category' onClick={() => handleCategoryClick(5)}>
+            <button className='navbar-fruit-button' >
+              <img className='fruit-category-icon' src={wheat} alt='wheat' />
+            </button>
+            <span className='navbar-category-text'>
+              Zboża
+            </span>
+          </div>
+          {/* </Link> */}
         </div>
       )
     else

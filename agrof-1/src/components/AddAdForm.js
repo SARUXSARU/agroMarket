@@ -5,7 +5,7 @@ import { useUser } from '../contexts/UserContext.js'
 import axios from '../services/api.js'
 
 
-export default function AddAd({ closeModal }) {
+export default function AddAd({ closeModal, fetchData }) {
     let [image, setImage] = useState("");
     const [description, setDescription] = useState("");
     const inputRef = useRef(null);
@@ -36,10 +36,10 @@ export default function AddAd({ closeModal }) {
     };
 
     const handleSubmit = async (event) => {
+        
         event.preventDefault();
-
         const form = event.target;
-       const title = form.title.value;
+        const title = form.title.value;
         const price = form.price.value;
         const description = form.description.value;
         const category=form.category.value;
@@ -52,6 +52,7 @@ export default function AddAd({ closeModal }) {
                 });
                 if(response.status===200){
                     alert("Pomyślnie dodano ogłoszenie");
+                    fetchData();
                     closeModal();
                 }
             }catch(error){

@@ -3,7 +3,7 @@ import AdListElement from './AdListElement'
 import { useLocation } from 'react-router-dom';
 import { Ad } from '../classes/Ad';
 import axiosInstance from '../services/api';
-
+import pluralize from 'pluralize';
 
 export default function AdList({ selectedMenuItem }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,140 +27,169 @@ export default function AdList({ selectedMenuItem }) {
   // <AdListElement selectedMenuItem={selectedMenuItem}/>, <AdListElement />, <AdListElement selectedMenuItem={selectedMenuItem}/>, <AdListElement selectedMenuItem={selectedMenuItem}/>,
   // <AdListElement selectedMenuItem={selectedMenuItem}/>, <AdListElement />, <AdListElement selectedMenuItem={selectedMenuItem}/>, <AdListElement selectedMenuItem={selectedMenuItem}/>,
   // <AdListElement selectedMenuItem={selectedMenuItem}/>, <AdListElement />, <AdListElement selectedMenuItem={selectedMenuItem}/>, <AdListElement selectedMenuItem={selectedMenuItem}/>];
-  
 
-  
 
-    // const fetchData = async () => {
-    //   try {
-    //     const response = await axiosInstance.get(`/ad/`);
 
-    //     if (response.status === 200) {
-    //       const updatedAds = [...ads];
-    //      const adsList = response.data.adsList;
-    //       const adsIds = response.data.adsIds;
-    //       if (location.pathname === '/userPage') {
-    //         if (updatedAds.length === 0) {
-    //           response.data.adsList.forEach((element, index) => {
-    //             if (JSON.parse(localStorage.getItem('user_id')) === element.user_id) {
-    //               const _id=adsIds[index];
-    //               updatedAds.push(new Ad(_id, element.title, element.price,element.description, element.title, element.image, element.category))
-    //             }
-    //           });
-    //         }
-    //       } else {
-    //         if (updatedAds.length === 0) {
-    //           adsList.forEach((element, index) => {
-    //             const _id = adsIds[index];
-    //             updatedAds.push(new Ad(_id, element.title, element.price, element.description, element.title, element.image, element.category));
-    //           });
-    //         }
 
-    //       }
-    //       console.log(updatedAds);
-    //       setAds(updatedAds);
-    //     }
-    //   } catch (error) {
-    //     console.log("fetch ads to list error: " + error);
-    //   }
-    // }
+  // const fetchData = async () => {
+  //   try {
+  //     const response = await axiosInstance.get(`/ad/`);
 
-    // function searchForTitle(param,title){
+  //     if (response.status === 200) {
+  //       const updatedAds = [...ads];
+  //      const adsList = response.data.adsList;
+  //       const adsIds = response.data.adsIds;
+  //       if (location.pathname === '/userPage') {
+  //         if (updatedAds.length === 0) {
+  //           response.data.adsList.forEach((element, index) => {
+  //             if (JSON.parse(localStorage.getItem('user_id')) === element.user_id) {
+  //               const _id=adsIds[index];
+  //               updatedAds.push(new Ad(_id, element.title, element.price,element.description, element.title, element.image, element.category))
+  //             }
+  //           });
+  //         }
+  //       } else {
+  //         if (updatedAds.length === 0) {
+  //           adsList.forEach((element, index) => {
+  //             const _id = adsIds[index];
+  //             updatedAds.push(new Ad(_id, element.title, element.price, element.description, element.title, element.image, element.category));
+  //           });
+  //         }
 
-    //   let findingFor=toString(param).toLowerCase;
-    //   let iHave=toString(title).toLowerCase;
+  //       }
+  //       console.log(updatedAds);
+  //       setAds(updatedAds);
+  //     }
+  //   } catch (error) {
+  //     console.log("fetch ads to list error: " + error);
+  //   }
+  // }
 
-    //   if(findingFor.includes(iHave)){
-    //     return true;
-    //   }else{
-    //     false;
-    //   }
+  // function searchForTitle(param,title){
 
-      
+  //   let findingFor=toString(param).toLowerCase;
+  //   let iHave=toString(title).toLowerCase;
 
-    // }
+  //   if(findingFor.includes(iHave)){
+  //     return true;
+  //   }else{
+  //     false;
+  //   }
 
-    const fetchData = async () => {
-      try {
-        const response = await axiosInstance.get(`/ad/`);
-    
-        if (response.status === 200) {
-          const adsList = response.data.adsList;
-          const adsIds = response.data.adsIds;
-          let updatedAds = [];
-    
-          if (location.pathname === '/userPage') {
+
+
+  // }
+  let updatedAds = []; /// tu zmiana przeniosłem z fetch data jakby cos sie wysrało to oddac pod pierwesze if 200
+
+  const fetchData = async () => {
+    console.log(window.location)
+    try {
+      const response = await axiosInstance.get(`/ad/`);
+
+      if (response.status === 200) {
+        const adsList = response.data.adsList;
+        const adsIds = response.data.adsIds;
+        
+
+        if (location.pathname === '/userPage') {
+
+          if (selectedMenuItem === 'userAds') {
+
             adsList.forEach((element, index) => {
               if (JSON.parse(localStorage.getItem('user_id')) === element.user_id) {
                 const _id = adsIds[index];
                 updatedAds.push(new Ad(_id, element.title, element.price, element.description, element.title, element.image, element.category));
               }
             });
-          } else if(location.pathname.includes('/searchResults')){
-           console.log(window.location.search)
-           const queryParams=new URLSearchParams(window.location.search);
-           const param=queryParams.get('query')
-            if(param===''){
-              adsList.forEach((element, index) => {
+
+          } else if (selectedMenuItem === 'userFavourites') {
+
+
+            let favArr = [];
+            try {
+              const favResponse = await axiosInstance.get(`/user/${JSON.parse(localStorage.getItem('user_id'))}`)
+              if (favResponse.status === 200) {
+                favResponse.data.userDTO.favourite.forEach(fav => favArr.push(fav));
+              }
+
+            } catch (error) {
+              console.log("fetch user fav error: " + error)
+            }
+            adsList.forEach((element, index) => {
+              if (favArr.includes(adsIds[index])) {
+
                 const _id = adsIds[index];
                 updatedAds.push(new Ad(_id, element.title, element.price, element.description, element.title, element.image, element.category));
-              });
-            }else{
-              const normalizeAndSort = (str) => {
-                return str.toLowerCase().split(' ').sort().join(' ');
-            };
-            
-            // Funkcja do sprawdzenia, czy wszystkie słowa z param są obecne w title
-            const wordsContained = (param, title) => {
-                const paramWords = param.toLowerCase().split(' ');
-                const titleWords = title.toLowerCase().split(' ');
-            
-                return paramWords.every(word => titleWords.includes(word));
-            };
-            
-            adsList.forEach((element, index) => {
-                const normalizedParam = param.toLowerCase();
-                const normalizedTitle = element.title.toLowerCase();
-            
-                // Sprawdzenie, czy param zawiera się w tytule lub tytuł zawiera się w param
-                const containsCheck = normalizedParam.includes(normalizedTitle) || normalizedTitle.includes(normalizedParam);
-            
-                // Sprawdzenie, czy tytuły zawierają te same słowa, niezależnie od kolejności
-                const wordsMatchCheck = normalizeAndSort(param) === normalizeAndSort(element.title);
-            
-                // Sprawdzenie, czy wszystkie słowa z param są obecne w tytule
-                const wordsContainedCheck = wordsContained(param, element.title);
-            
-                if (containsCheck || wordsMatchCheck || wordsContainedCheck) {
-                    const _id = adsIds[index];
-                    updatedAds.push(new Ad(_id, element.title, element.price, element.description, element.title, element.image, element.category));
-                }
+              }
             });
-            }
-
           }
-          else {
+
+        } else if (location.pathname.includes('/searchResults')) {
+          const queryParams = new URLSearchParams(window.location.search);
+          const param = queryParams.get('query')
+          const category = location.state?.category;
+          console.log("kategoria kurwiu: " + category)
+          if (param === '' || param === null) { //todo null gdy wybieramy kategorie to trzeba ogarnąć
             adsList.forEach((element, index) => {
               const _id = adsIds[index];
               updatedAds.push(new Ad(_id, element.title, element.price, element.description, element.title, element.image, element.category));
             });
-          }
-          console.log(updatedAds);
-          setAds(updatedAds);
-        }
-      } catch (error) {
-        console.log("fetch ads to list error: " + error);
-      }
-    };
-  
+          } else if (param != '') {
+            const normalizeAndSort = (str) => {
+              return str.toLowerCase().split(' ').sort().join(' ');
+            };
 
-    useEffect(() => {
-      if (location.state && location.state.category) {
-        setSelectedCategory(location.state.category);
+            // Funkcja do sprawdzenia, czy wszystkie słowa z param są obecne w title
+            const wordsContained = (param, title) => {
+              const paramWords = param.toLowerCase().split(' ');
+              const titleWords = title.toLowerCase().split(' ');
+
+              return paramWords.every(word => titleWords.includes(word) || titleWords.includes(pluralize.singular(word)) || titleWords.includes(pluralize.plural(word)));
+            };
+
+            adsList.forEach((element, index) => {
+              const normalizedParam = param.toLowerCase();
+              const normalizedTitle = element.title.toLowerCase();
+
+              // Sprawdzenie, czy param zawiera się w tytule lub tytuł zawiera się w param
+              const containsCheck = normalizedParam.includes(normalizedTitle) || normalizedTitle.includes(normalizedParam);
+
+              // Sprawdzenie, czy tytuły zawierają te same słowa, niezależnie od kolejności
+              const wordsMatchCheck = normalizeAndSort(param) === normalizeAndSort(element.title);
+
+              // Sprawdzenie, czy wszystkie słowa z param są obecne w tytule
+              const wordsContainedCheck = wordsContained(param, element.title);
+
+              if (containsCheck || wordsMatchCheck || wordsContainedCheck) {
+                const _id = adsIds[index];
+                updatedAds.push(new Ad(_id, element.title, element.price, element.description, element.title, element.image, element.category));
+              }
+            });
+          }
+
+        }
+        else {
+          adsList.forEach((element, index) => {
+            const _id = adsIds[index];
+            updatedAds.push(new Ad(_id, element.title, element.price, element.description, element.title, element.image, element.category));
+          });
+        }
+
+        setAds(updatedAds);
       }
-  
-      fetchData();
-    }, [location]);
+    } catch (error) {
+      console.log("fetch ads to list error: " + error);
+    }
+  };
+
+
+  useEffect(() => {
+    if (location.state && location.state.category) {
+      setSelectedCategory(location.state.category);
+    }
+
+    fetchData();
+  }, [location, selectedMenuItem]);
 
 
 
@@ -194,8 +223,8 @@ export default function AdList({ selectedMenuItem }) {
       <ul className="four-per-row-list">
         {currentItems.map((ad, index) => (
           <li key={index} className="list-item">
-            {console.log("przekazane _id:"+ad._id)}
-            <AdListElement 
+
+            <AdListElement
               _id={ad._id}
               title={ad.title}
               price={ad.price}
@@ -231,7 +260,7 @@ export default function AdList({ selectedMenuItem }) {
               image={ad.image}
               selectedMenuItem={selectedMenuItem}
               fetchData={fetchData}
-              />
+            />
           </li>
         ))}
       </ul>

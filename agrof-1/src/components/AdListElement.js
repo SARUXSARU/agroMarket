@@ -52,7 +52,7 @@ export default function AdListElement({ _id, title, price, description, adLocati
                 )
             }
         } else
-            return null; 
+            return null;
     }
 
 
@@ -61,7 +61,7 @@ export default function AdListElement({ _id, title, price, description, adLocati
 
     return (
         <div className='ad'>
-            {console.log(_id)}
+
             <Link to={`/adPage/${_id}`} className='ad-click' >
                 <div className='ad-div-img'>
                     <img className='ad-img' alt="marchew" src={image}></img>
@@ -75,10 +75,9 @@ export default function AdListElement({ _id, title, price, description, adLocati
                         </button>
                         {renderEditAdButton()}
                     </div>
-                    <span className='ad-price'>{price}</span>
+                    <span className='ad-price'>{price}zł</span>
                     <span className='ad-location'>{adLocation}</span>
                 </div>
-
             </Link>
             {isEditAdFormOpen && (
                 <div className='modal-background'>
