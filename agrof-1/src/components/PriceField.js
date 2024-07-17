@@ -17,6 +17,21 @@ export default function PriceField({ _id }) {
     useEffect(() => {
         const fetchAdData = async () => {
             try {
+
+                if (localStorage.getItem('user_id')) {
+
+                    try {
+                        const response = await axiosInstance.get(`/user/${JSON.parse(localStorage.getItem('user_id'))}`)
+                        if (response.status === 200) {
+                            if (response.data.userDTO.favourite.includes(_id)) {
+                                setIsLiked(true);
+                            }
+                        }
+                    } catch (error) {
+                        console.log("can't get user to check is liked: " + error)
+                    }
+                }
+
                 const response = await axiosInstance.get(`/ad/${_id}`)
                 if (response.status === 200) {
                     try {
@@ -40,24 +55,55 @@ export default function PriceField({ _id }) {
             }
         }
         fetchAdData();
+
     }, []);
 
     const { user } = useUser();
     const [isLiked, setIsLiked] = useState(false);
 
-    const handleLikeClick = (e) => {
+    function setUpIsLiked() {
+        if (localStorage.getItem('user_id')) {
+            try {
+                const response = axiosInstance.get(`/user/${JSON.parse(localStorage.getItem('user_id'))}`)
+                if (response.status === 200) {
+                    console.log(response.data.userDTO.favourite)
+                }
+            } catch (error) {
+                console.log("can't get user to check is liked: " + error)
+            }
+        }
+    }
+
+
+
+
+    const handleLikeClick = async (e) => {
         e.preventDefault();
-        setIsLiked(!isLiked);
+        const favourite = [_id];
+        if (localStorage.getItem('user_id')) {
+            try {
+                const response = await axiosInstance.put(`/user/${JSON.parse(localStorage.getItem('user_id'))}`, { favourite })
+                if (response.status === 200) {
+                    console.log("poszlo");
+                    setIsLiked(!isLiked);
+                }
+            } catch (error) {
+                console.log("can't get fav of this user: " + error)
+            }
+        } else {
+            alert("Aby polubić ogłoszenie musisz się zalogować")
+        }
+
     };
 
     const maskData = (data) => {
-        if (!localStorage.getItem('user_id')){
+        if (!localStorage.getItem('user_id')) {
             if (!data) return "";
             return data.charAt(0) + "*".repeat(data.length - 1);
-        }else{
+        } else {
             return data;
         }
-           
+
     };
 
     //const isUserLoggedIn = localStorage.getItem('user');
@@ -68,6 +114,7 @@ export default function PriceField({ _id }) {
 
     return (
         <div className="price-container">
+
             <div className="price-tytul">
                 {title}
                 <button className='like-button-price' onClick={handleLikeClick}>

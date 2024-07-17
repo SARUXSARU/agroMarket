@@ -16,32 +16,33 @@ import java.util.List;
 @Service
 public class UserService {
     private UserRepository userRepository;
-// todo favourite as object id i think
+
+    // todo favourite as object id i think
     public AddUserResponseDTO addUser(UserDTO userDTO) {
-        List<String> userAds=new ArrayList<>();
-        List<String> userFavourite=new ArrayList<>();
-        UserEntity userEntity = new UserEntity(null, userDTO.getAuthCode(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(), userDTO.getPhoneNumber(),userAds,userFavourite);
+        List<String> userAds = new ArrayList<>();
+        List<String> userFavourite = new ArrayList<>();
+        UserEntity userEntity = new UserEntity(null, userDTO.getAuthCode(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(), userDTO.getPhoneNumber(), userAds, userFavourite);
         if (userRepository.findUserEntityByEmail(userDTO.getEmail()).isPresent()) {
             throw new UserWithThisNameExistException("Already exist user with this name or email");
         }
         userRepository.save(userEntity);
         return new AddUserResponseDTO("ok", HttpStatus.ACCEPTED);
     }
+
     public GetUserResponseDTO getUser(String _id) {
         UserEntity userEntity = userRepository.findUserEntityBy_id(_id).orElseThrow(() -> new WrongUserID("There is no user with this _id"));
-        UserDTO userDTO = new UserDTO( userEntity.getAuthCode(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getEmail(), userEntity.getPhoneNumber(), userEntity.getUserAd(),userEntity.getFavourite());
+        UserDTO userDTO = new UserDTO(userEntity.getAuthCode(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getEmail(), userEntity.getPhoneNumber(), userEntity.getUserAd(), userEntity.getFavourite());
         return new GetUserResponseDTO(userDTO, "ok", HttpStatus.OK);
     }
 
 
-    public CheckIfUserResponseDTO checkIfUser(UserLoginDTO userLoginDTO){
-        UserEntity userEntity=userRepository.findUserEntityByEmailAndAuthCode(userLoginDTO.getEmail(), userLoginDTO.getAuthCode()).orElseThrow(() -> new WrongUserID("Email or password is wrong"));
-        UserDTO userDTO = new UserDTO( userEntity.getAuthCode(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getEmail(), userEntity.getPhoneNumber(), userEntity.getUserAd(),userEntity.getFavourite());
-        String _id= String.valueOf(userEntity.get_id());
-        System.out.println("her moje id:  "+_id);
+    public CheckIfUserResponseDTO checkIfUser(UserLoginDTO userLoginDTO) {
+        UserEntity userEntity = userRepository.findUserEntityByEmailAndAuthCode(userLoginDTO.getEmail(), userLoginDTO.getAuthCode()).orElseThrow(() -> new WrongUserID("Email or password is wrong"));
+        UserDTO userDTO = new UserDTO(userEntity.getAuthCode(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getEmail(), userEntity.getPhoneNumber(), userEntity.getUserAd(), userEntity.getFavourite());
+        String _id = String.valueOf(userEntity.get_id());
+        System.out.println("her moje id:  " + _id);
         return new CheckIfUserResponseDTO(userDTO, _id, "ok", HttpStatus.OK);
     }
-
 
 
     public DeleteUserResponseDTO deleteUser(ObjectId _id) {
@@ -68,8 +69,8 @@ public class UserService {
             for (String newFavourite : userDTO.getFavourite()) {
                 if (!existingFavourites.contains(newFavourite)) {
                     existingFavourites.add(newFavourite);
-                }else{
-                   existingFavourites.remove(existingFavourites.indexOf(newFavourite));
+                } else {
+                    existingFavourites.remove(existingFavourites.indexOf(newFavourite));
                 }
             }
             userEntity.setFavourite(existingFavourites);

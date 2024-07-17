@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import heart from './icons/heart.png'
 import heartRed from './icons/heartRed.png'
 import { Link, useLocation } from 'react-router-dom'
@@ -11,6 +11,26 @@ export default function AdListElement({ _id, title, price, description, adLocati
     const [isLiked, setIsLiked] = useState(false);
     const [isEditAdFormOpen, setIsEditAdFormOpen] = useState(false);
     const [adData, setAdData] = useState(null);
+
+    useEffect(() => {
+        const checkIfLiked = async () => {
+            if (localStorage.getItem('user_id')) {
+                try {
+                    const response = await axiosInstance.get(`/user/${JSON.parse(localStorage.getItem('user_id'))}`);
+                    if (response.status === 200) {
+                        if (response.data.userDTO.favourite.includes(_id)) {
+                            setIsLiked(true);
+                        }
+                    }
+                } catch (error) {
+                    console.log("Error checking if ad is liked: " + error);
+                }
+            }
+        };
+
+        checkIfLiked();
+    }, [_id]);
+
 
     const handleEditAdButtonClick = async (e) => {
         e.preventDefault();
@@ -40,6 +60,7 @@ export default function AdListElement({ _id, title, price, description, adLocati
     const handleLikeClick = async (e) => {
         e.preventDefault();
         const favourite=[_id];
+        if(localStorage.getItem('user_id')){
         try{
             const response= await axiosInstance.put(`/user/${JSON.parse(localStorage.getItem('user_id'))}`,{ favourite })
                 if(response.status===200){
@@ -50,6 +71,9 @@ export default function AdListElement({ _id, title, price, description, adLocati
         }catch(error){
             console.log("like error: "+error);
         }
+    }else{
+        alert("Aby polubić ogłoszenie musisz się zalogować");
+    }
        // setIsLiked(!isLiked);
     };
 
@@ -87,7 +111,7 @@ export default function AdListElement({ _id, title, price, description, adLocati
                         {renderEditAdButton()}
                     </div>
                     <span className='ad-price'>{price}zł</span>
-                    <span className='ad-location'>{adLocation}</span>
+                    {/* <span className='ad-location'>{adLocation}</span> */}
                 </div>
             </Link>
             {isEditAdFormOpen && (

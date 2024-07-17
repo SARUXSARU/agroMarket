@@ -19,10 +19,6 @@ let initSlides = [
   // { url: marchew3 }
 ];
 
-// const containerStyles = {
-//   width: "500px",
-//   height: "280px",
-// };
 
 
 export default function AdPage() {

@@ -14,6 +14,7 @@ export default function AdList({ selectedMenuItem, sortType }) {
   const categoryFilter = location.state?.category;
 
 
+
   if (location.pathname === '/userPage') {
     itemsPerPage = 6;
   } else if (location.pathname === '/searchResults') {
@@ -24,12 +25,13 @@ export default function AdList({ selectedMenuItem, sortType }) {
 
   const fetchData = async () => {
     try {
-      const response = await axiosInstance.get(`/ad/`);
+
+      
+    const response = await axiosInstance.get(`/ad/`);
 
       if (response.status === 200) {
         const adsList = response.data.adsList;
         const adsIds = response.data.adsIds;
-
 
         if (location.pathname === '/userPage') {
 
@@ -43,7 +45,6 @@ export default function AdList({ selectedMenuItem, sortType }) {
             });
 
           } else if (selectedMenuItem === 'userFavourites') {
-
 
             let favArr = [];
             try {
