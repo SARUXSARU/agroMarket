@@ -13,9 +13,10 @@ import { useParams } from 'react-router-dom';
 
 
 let initSlides = [
-  { url: "" },
-  { url: marchew2 },
-  { url: marchew3 }
+  { url: "" }
+  // ,
+  // { url: marchew2 },
+  // { url: marchew3 }
 ];
 
 // const containerStyles = {
@@ -28,8 +29,6 @@ export default function AdPage() {
 
   const [slides, setSlides] = useState(initSlides);
   const { _id } = useParams();
-
-  console.log(_id);
 
 
   useEffect(() => {

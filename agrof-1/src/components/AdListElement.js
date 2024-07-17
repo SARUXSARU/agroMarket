@@ -37,9 +37,20 @@ export default function AdListElement({ _id, title, price, description, adLocati
         setIsEditAdFormOpen(false);
     }
 
-    const handleLikeClick = (e) => {
+    const handleLikeClick = async (e) => {
         e.preventDefault();
-        setIsLiked(!isLiked);
+        const favourite=[_id];
+        try{
+            const response= await axiosInstance.put(`/user/${JSON.parse(localStorage.getItem('user_id'))}`,{ favourite })
+                if(response.status===200){
+                    console.log("dodane suczko do ulubionych");
+                    setIsLiked(!isLiked);
+                    fetchData();
+                }
+        }catch(error){
+            console.log("like error: "+error);
+        }
+       // setIsLiked(!isLiked);
     };
 
     const location = useLocation();

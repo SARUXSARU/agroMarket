@@ -37,7 +37,6 @@ export default function LoginForm({ closeModal, handleLogin, openRegister }) {
                     });
                 if (response.status === 200) {
                     localStorage.setItem('user_id',JSON.stringify(response.data._id));
-                    console.log(localStorage.getItem('user'))
                     
                     handleLoginClick();
                     alert("Zalogowano pomyślnie");

@@ -59,7 +59,21 @@ public class UserService {
         userEntity.setEmail(userDTO.getEmail() != null ? userDTO.getEmail() : userEntity.getEmail());
         userEntity.setPhoneNumber(userDTO.getPhoneNumber() != null ? userDTO.getPhoneNumber() : userEntity.getPhoneNumber());
         userEntity.setUserAd((userDTO.getUserAd()));
-        userEntity.setFavourite((userDTO.getFavourite()));
+
+        if (userDTO.getFavourite() != null && !userDTO.getFavourite().isEmpty()) {
+            List<String> existingFavourites = userEntity.getFavourite();
+            if (existingFavourites == null) {
+                existingFavourites = new ArrayList<>();
+            }
+            for (String newFavourite : userDTO.getFavourite()) {
+                if (!existingFavourites.contains(newFavourite)) {
+                    existingFavourites.add(newFavourite);
+                }else{
+                   existingFavourites.remove(existingFavourites.indexOf(newFavourite));
+                }
+            }
+            userEntity.setFavourite(existingFavourites);
+        }
         userRepository.save(userEntity);
         return new PutUserResponseDTO("User updated", HttpStatus.OK);
     }

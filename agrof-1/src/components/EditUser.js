@@ -16,7 +16,7 @@ export default function EditUser({ closeModal, fetchUser }) {
                     const response = await axios.get(`/user/${id}`);
                     if (response.status === 200) {
                         setUserData(response.data.userDTO);
-                        console.log(response.data.userDTO.authCode + " " + response.data.userDTO.firstName + " " + response.data.userDTO.lastName + " " + response.data.userDTO.email + " " + response.data.userDTO.phoneNumber);
+                        
                     }
                 } catch (error) {
                     console.error("Error fetching user data:", error);
@@ -35,7 +35,6 @@ export default function EditUser({ closeModal, fetchUser }) {
         const lastName = form.lastName.value;
         const email = form.email.value;
         const phoneNumber = form.phoneNumber.value;
-        console.log(firstName + " " + lastName + " " + email + " " + phoneNumber);
 
         if (form.checkValidity()) {
             try {

@@ -5,7 +5,7 @@ import { Ad } from '../classes/Ad';
 import axiosInstance from '../services/api';
 import pluralize from 'pluralize';
 
-export default function AdList({ selectedMenuItem }) {
+export default function AdList({ selectedMenuItem, sortType }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState(null);
   let [ads, setAds] = useState([]);
@@ -20,76 +20,16 @@ export default function AdList({ selectedMenuItem }) {
     itemsPerPage = 12;
   }
 
-
-
-  // const items = [<AdListElement selectedMenuItem={selectedMenuItem}/>, <AdListElement selectedMenuItem={selectedMenuItem}/>, <AdListElement selectedMenuItem={selectedMenuItem}/>,
-  // <AdListElement selectedMenuItem={selectedMenuItem}/>, <AdListElement />, <AdListElement selectedMenuItem={selectedMenuItem}/>, <AdListElement selectedMenuItem={selectedMenuItem}/>,
-  // <AdListElement selectedMenuItem={selectedMenuItem}/>, <AdListElement />, <AdListElement selectedMenuItem={selectedMenuItem}/>, <AdListElement selectedMenuItem={selectedMenuItem}/>,
-  // <AdListElement selectedMenuItem={selectedMenuItem}/>, <AdListElement />, <AdListElement selectedMenuItem={selectedMenuItem}/>, <AdListElement selectedMenuItem={selectedMenuItem}/>,
-  // <AdListElement selectedMenuItem={selectedMenuItem}/>, <AdListElement />, <AdListElement selectedMenuItem={selectedMenuItem}/>, <AdListElement selectedMenuItem={selectedMenuItem}/>];
-
-
-
-
-  // const fetchData = async () => {
-  //   try {
-  //     const response = await axiosInstance.get(`/ad/`);
-
-  //     if (response.status === 200) {
-  //       const updatedAds = [...ads];
-  //      const adsList = response.data.adsList;
-  //       const adsIds = response.data.adsIds;
-  //       if (location.pathname === '/userPage') {
-  //         if (updatedAds.length === 0) {
-  //           response.data.adsList.forEach((element, index) => {
-  //             if (JSON.parse(localStorage.getItem('user_id')) === element.user_id) {
-  //               const _id=adsIds[index];
-  //               updatedAds.push(new Ad(_id, element.title, element.price,element.description, element.title, element.image, element.category))
-  //             }
-  //           });
-  //         }
-  //       } else {
-  //         if (updatedAds.length === 0) {
-  //           adsList.forEach((element, index) => {
-  //             const _id = adsIds[index];
-  //             updatedAds.push(new Ad(_id, element.title, element.price, element.description, element.title, element.image, element.category));
-  //           });
-  //         }
-
-  //       }
-  //       console.log(updatedAds);
-  //       setAds(updatedAds);
-  //     }
-  //   } catch (error) {
-  //     console.log("fetch ads to list error: " + error);
-  //   }
-  // }
-
-  // function searchForTitle(param,title){
-
-  //   let findingFor=toString(param).toLowerCase;
-  //   let iHave=toString(title).toLowerCase;
-
-  //   if(findingFor.includes(iHave)){
-  //     return true;
-  //   }else{
-  //     false;
-  //   }
-
-
-
-  // }
   let updatedAds = []; /// tu zmiana przeniosłem z fetch data jakby cos sie wysrało to oddac pod pierwesze if 200
 
   const fetchData = async () => {
-    console.log(window.location)
     try {
       const response = await axiosInstance.get(`/ad/`);
 
       if (response.status === 200) {
         const adsList = response.data.adsList;
         const adsIds = response.data.adsIds;
-        
+
 
         if (location.pathname === '/userPage') {
 
@@ -128,7 +68,6 @@ export default function AdList({ selectedMenuItem }) {
           const queryParams = new URLSearchParams(window.location.search);
           const param = queryParams.get('query')
           const category = location.state?.category;
-          console.log("kategoria kurwiu: " + category)
           if (param === '' || param === null) { //todo null gdy wybieramy kategorie to trzeba ogarnąć
             adsList.forEach((element, index) => {
               const _id = adsIds[index];
@@ -176,6 +115,18 @@ export default function AdList({ selectedMenuItem }) {
         }
 
         setAds(updatedAds);
+
+      }
+
+      if (sortType === "asc") {
+        updatedAds.sort((a, b) => a.price - b.price);
+        setAds(updatedAds)
+      } else if (sortType === "desc") {
+        updatedAds.sort((a, b) => b.price - a.price);
+        setAds(updatedAds);
+      } else {
+        updatedAds.reverse();
+        setAds(updatedAds);
       }
     } catch (error) {
       console.log("fetch ads to list error: " + error);
@@ -189,7 +140,7 @@ export default function AdList({ selectedMenuItem }) {
     }
 
     fetchData();
-  }, [location, selectedMenuItem]);
+  }, [location, selectedMenuItem, sortType]);
 
 
 

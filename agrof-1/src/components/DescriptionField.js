@@ -9,7 +9,6 @@ export default function DescriptionField({_id}) {
             try{
                 const response = await axios.get(`/ad/${_id}`);
                 if(response.status===200){
-                    console.log("AD description: "+response.data.adDTO.description);
                     setAdDescription(response.data.adDTO.description);
                 }
             }catch(error){
