@@ -2,7 +2,7 @@ import React from 'react'
 import closeIcon from './icons/closeIcon.png'
 import axios from '../services/api.js';
 
-export default function RegisterForm({ closeModal, openLogin, handleRegister }) {
+export default function RegisterForm({ closeModal, openLogin, handleRegister, fetchAd }) {
 
 
 
@@ -47,6 +47,7 @@ export default function RegisterForm({ closeModal, openLogin, handleRegister }) 
                             console.log("getregisered data: " + getRegisteredResponse.data);
                             if (getRegisteredResponse.status === 200) {
                                 localStorage.setItem('user_id',JSON.stringify(getRegisteredResponse.data._id));
+                                fetchAd();
                             }
                         } catch (error) {
                             console.log("nie udało sie zalogowac na konto pomimo rejestracji");

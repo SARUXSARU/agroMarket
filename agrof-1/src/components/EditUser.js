@@ -3,11 +3,31 @@ import closeIcon from './icons/closeIcon.png'
 import axios from '../services/api';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import axiosInstance from '../services/api';
 
 export default function EditUser({ closeModal, fetchUser }) {
 
     const [userData, setUserData] = useState(null);
     const id = JSON.parse(localStorage.getItem('user_id'));
+
+    // const deleteUser = async () => {
+    //     try {
+    //         const response = await axiosInstance.delete(`/user/${id}`);
+    //         if (response.status === 200) {
+    //             alert("Użytkownik został usunięty");
+    //             closeModal(false);
+    //             setIsLoggedIn(false);
+    //             localStorage.setItem('isLoggedIn', false);
+    //             window.location.href = '/';
+    //             localStorage.clear();
+    // alert("Wylogowano pomyślnie");
+    //         } else {
+    //             console.log("Status is not 200: " + response.status);
+    //         }
+    //     } catch (error) {
+    //         console.log("Delete user error: " + error);
+    //     }
+    // }
 
     useEffect(() => {
         if (id) {
@@ -86,9 +106,17 @@ export default function EditUser({ closeModal, fetchUser }) {
                     <button onClick={() =>
                         closeModal(false)}
                         className='discardButton'
+                        type="button"
                     >
                         Anuluj
-                    </button></div>
+                    </button>
+                    {/* <button 
+                        className='deleteButton'
+                        type="button"
+                    >
+                        Usuń
+                    </button> */}
+                    </div>
 
             </div>
 

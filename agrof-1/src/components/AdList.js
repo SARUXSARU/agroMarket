@@ -5,7 +5,7 @@ import { Ad } from '../classes/Ad';
 import axiosInstance from '../services/api';
 import pluralize from 'pluralize';
 
-export default function AdList({ selectedMenuItem, sortType }) {
+export default function AdList({ selectedMenuItem, sortType, justLoggedIn, fetchAds, setFetchAds }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState(null);
   let [ads, setAds] = useState([]);
@@ -134,6 +134,11 @@ export default function AdList({ selectedMenuItem, sortType }) {
     }
   };
 
+  if(fetchAds){
+    fetchData();
+    setFetchAds(false);
+  }
+
 
   useEffect(() => {
     if (location.state && location.state.category) {
@@ -141,7 +146,14 @@ export default function AdList({ selectedMenuItem, sortType }) {
     }
 
     fetchData();
-  }, [location, selectedMenuItem, sortType]);
+
+    if(justLoggedIn===true){
+      console.log("jest true ")
+      fetchData();
+    }else{
+      console.log("just logged : "+justLoggedIn)
+    }
+  }, [location, selectedMenuItem, sortType, justLoggedIn, fetchAds]);
 
 
 
@@ -186,6 +198,7 @@ export default function AdList({ selectedMenuItem, sortType }) {
               category={ad.category}
               selectedMenuItem={selectedMenuItem}
               fetchData={fetchData}
+              justLoggedIn={justLoggedIn}
             />
 
           </li>
@@ -212,6 +225,7 @@ export default function AdList({ selectedMenuItem, sortType }) {
               image={ad.image}
               selectedMenuItem={selectedMenuItem}
               fetchData={fetchData}
+              justLoggedIn={justLoggedIn}
             />
           </li>
         ))}

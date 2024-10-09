@@ -11,14 +11,15 @@ export default function SearchResults() {
   document.title = "Wyniki wyszukiwania"
   
   const [sortType,setSortType]= useState('new');
+  const [justLoggedIn, setJustLoggedIn] = useState(false);
   
 
   return (
     <div className='SearchResults'>
-      <Navbar></Navbar>
+      <Navbar justLoggedIn={justLoggedIn} setJustLoggedIn={setJustLoggedIn}></Navbar>
       <PageInfoBar></PageInfoBar>
       <StripsMenuBar sortType={sortType} setSortType={setSortType}></StripsMenuBar>
-      <AdList sortType={sortType}></AdList>
+      <AdList sortType={sortType} justLoggedIn={justLoggedIn}></AdList>
     </div>
   )
 }

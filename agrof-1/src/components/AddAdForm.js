@@ -3,9 +3,10 @@ import closeIcon from './icons/closeIcon.png'
 import imageIcon from './icons/image.png'
 import { useUser } from '../contexts/UserContext.js'
 import axios from '../services/api.js'
+import defImage from './icons/defImage.png'
 
 
-export default function AddAd({ closeModal, fetchData }) {
+export default function AddAd({ closeModal, fetchData, setFetchAds }) {
     let [image, setImage] = useState("");
     const [description, setDescription] = useState("");
     const inputRef = useRef(null);
@@ -47,13 +48,17 @@ export default function AddAd({ closeModal, fetchData }) {
 
         if (form.checkValidity()) {
             try{
+                if(!image){
+                    image=defImage;
+                }
                 const response = await axios.post('/ad/',{
                     title, price, image, category, description, user_id
                 });
                 if(response.status===200){
                     alert("Pomyślnie dodano ogłoszenie");
-                    fetchData();
+                    setFetchAds(true);
                     closeModal();
+                    
                 }
             }catch(error){
                 console.log("add ad error "+error);

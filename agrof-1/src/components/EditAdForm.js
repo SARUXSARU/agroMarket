@@ -50,6 +50,21 @@ export default function EditAdForm({ adData, closeModal, fetchData }) {
         }
     };
 
+    const deleteAd = async () => {
+        try {
+            const response = await axiosInstance.delete(`/ad/${_id}`);
+            if (response.status === 200) {
+                alert("Ogłoszenie zostało usunięte");
+                fetchData();
+                closeModal(false)
+            } else {
+                console.log("Status is not 200: " + response.status);
+            }
+        } catch (error) {
+            console.log("Delete ad error: " + error);
+        }
+    }
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const form = event.target;
@@ -60,10 +75,10 @@ export default function EditAdForm({ adData, closeModal, fetchData }) {
             const description = form.description.value;
 
             try {
-                const response = await axiosInstance.put(`/ad/${_id}`,{
-                    title,price,image, description
+                const response = await axiosInstance.put(`/ad/${_id}`, {
+                    title, price, image, description
                 });
-                
+
                 if (response.status === 200) {
                     console.log("poszol")
                     alert("Pomyślnie zaktualizowano ogłoszenie");
@@ -73,10 +88,10 @@ export default function EditAdForm({ adData, closeModal, fetchData }) {
             } catch (error) {
                 console.log("put ad data error: " + error)
             }
-            
-            
-            
-            
+
+
+
+
         } else {
         }
     };
@@ -126,12 +141,17 @@ export default function EditAdForm({ adData, closeModal, fetchData }) {
                 </ul>
                 <div className='editButtons'>
                     <input type="submit" className='editButton' value={"Edytuj"}></input>
-                    <button onClick={() =>
+                    <button type="button" onClick={() =>
                         closeModal(false)}
                         className='discardButton'
-                    >
-                        Anuluj
-                    </button></div>
+                    >Anuluj
+                    </button>
+                    <button type="button" onClick={() =>
+                        deleteAd()}
+                        className='deleteButton'
+                    >Usuń</button>
+
+                </div>
 
             </div>
 

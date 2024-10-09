@@ -7,7 +7,7 @@ import axiosInstance from '../services/api'
 
 
 
-export default function AdListElement({ _id, title, price, description, adLocation, image, category, selectedMenuItem, fetchData }) {
+export default function AdListElement({ _id, title, price, description, adLocation, image, category, selectedMenuItem, fetchData, justLoggedIN }) {
     const [isLiked, setIsLiked] = useState(false);
     const [isEditAdFormOpen, setIsEditAdFormOpen] = useState(false);
     const [adData, setAdData] = useState(null);
@@ -27,9 +27,14 @@ export default function AdListElement({ _id, title, price, description, adLocati
                 }
             }
         };
-
+        //console.log(isLiked);
         checkIfLiked();
-    }, [_id]);
+        //console.log(isLiked);
+        if(justLoggedIN){
+            fetchData();
+            checkIfLiked();
+        }
+    }, [_id,selectedMenuItem]);
 
 
     const handleEditAdButtonClick = async (e) => {

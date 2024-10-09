@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class UserController {
 
-    //TO_DO add user validation
     private UserService userService;
 
     @PostMapping("/")

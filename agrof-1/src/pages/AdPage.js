@@ -25,30 +25,29 @@ export default function AdPage() {
 
   const [slides, setSlides] = useState(initSlides);
   const { _id } = useParams();
+  
+  const fetchAd = async () => {
+    try {
 
+      const response = await axios.get(`/ad/${_id}`);
+      if (response.status === 200) {
+        const updatedSlides = [...initSlides]; // Copy the initial slides
+        updatedSlides[0].url = response.data.adDTO.image;
+        setSlides(updatedSlides);
+      }
+    } catch (error) {
+      console.log("fetchAd error: " + error);
+    }
+  };
 
   useEffect(() => {
-    const fetchAd = async () => {
-      try {
-
-        const response = await axios.get(`/ad/${_id}`);
-        if (response.status === 200) {
-          const updatedSlides = [...initSlides]; // Copy the initial slides
-          updatedSlides[0].url = response.data.adDTO.image;
-          setSlides(updatedSlides);
-        }
-      } catch (error) {
-        console.log("fetchAd error: " + error);
-      }
-    };
     fetchAd();
   }, []);
 
   document.title = "Tytuł";
   return (
-
     <div className='AdPage'>
-      <Navbar></Navbar>
+      <Navbar fetchAd={fetchAd}></Navbar>
       <PageInfoBar></PageInfoBar>
       <div className='img-price'>
         <ImgSlider slides={slides}></ImgSlider>

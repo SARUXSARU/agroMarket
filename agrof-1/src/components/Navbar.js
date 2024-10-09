@@ -11,7 +11,7 @@ import RegisterForm from './RegisterForm'
 import { useNavigate } from 'react-router-dom'
 
 
-export default function Navbar() {
+export default function Navbar({ justLoggedIn, setJustLoggedIn,fetchAd }) {
   const navigate = useNavigate();
 
   const handleCategoryClick = (category) => {
@@ -80,12 +80,12 @@ export default function Navbar() {
           <Link className='profil-icon' onClick={handleIconClick}></Link>
           {isLoginFormOpen && (
             <div className='modal-background'>
-              <LoginForm closeModal={closeModal} handleLogin={handleLogin} openRegister={handleRegisterClick} />
+              <LoginForm closeModal={closeModal} handleLogin={handleLogin} openRegister={handleRegisterClick} justLoggedIn={justLoggedIn} setJustLoggedIn={setJustLoggedIn} fetchAd={fetchAd}/>
             </div>
           )}
           {isRegisterFormOpen && (
             <div className='modal-background'>
-              <RegisterForm closeModal={closeModal} openLogin={handleIconClick} handleRegister={handleRegister} />
+              <RegisterForm closeModal={closeModal} openLogin={handleIconClick} handleRegister={handleRegister} justLoggedIn={justLoggedIn} setJustLoggedIn={setJustLoggedIn} fetchAd={fetchAd}/>
             </div>
           )}
         </div>
@@ -186,25 +186,12 @@ export default function Navbar() {
 
   return (
     <div className='navbar'>
-
       <Link to='/' className="navbar-logo">
         <img href='/' src={logo} className='navbar-logo' alt="logo" />
       </Link>
-
       {renderSearchBar()}
-
-
       {renderUserIcon()}
-
-
-
-
-
       {renderCategories()}
-
-
-
-
     </div>
   )
 }

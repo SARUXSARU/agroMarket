@@ -22,7 +22,7 @@ public class AdDTO {
     private int category;
     @NotBlank
     @Size(min = 5, max = 350)
-    private String description; // max length 350
+    private String description;
     @NotBlank
     private String user_id;
 }

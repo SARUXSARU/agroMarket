@@ -12,7 +12,6 @@ import SearchResults from './pages/SearchResults';
 import AdPage from './pages/AdPage';
 import { UserProvider } from './contexts/UserContext.js';
 
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -40,9 +39,6 @@ root.render(
     </RouterProvider>
     </UserProvider>
   </React.StrictMode>
-
-
-
 );
 
 reportWebVitals();

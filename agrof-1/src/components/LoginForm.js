@@ -5,9 +5,9 @@ import axios from '../services/api.js';
 // import { useUser } from '../contexts/UserContext.js';
 
 
-export default function LoginForm({ closeModal, handleLogin, openRegister }) {
+export default function LoginForm({ closeModal, handleLogin, openRegister, justLoggedIn, setJustLoggedIn, fetchAd }) {
 
-   // const { setUser } = useUser();
+   
 
     function showPassword() {
         var x = document.getElementById("password");
@@ -40,6 +40,10 @@ export default function LoginForm({ closeModal, handleLogin, openRegister }) {
                     
                     handleLoginClick();
                     alert("Zalogowano pomyślnie");
+                    setJustLoggedIn(true);
+                    fetchAd();
+                    console.log("login form : "+justLoggedIn)
+                    
                 } else {
                     console.log("response: " + response.status)
                     alert("Błędny email lub hasło");

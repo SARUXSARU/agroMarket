@@ -14,8 +14,9 @@ export default function UserPage() {
   document.title = "Twoje konto";
   const [selectedMenuItem, setSelectedMenuItem] = useState('userData');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [showForm, setShowForm] = useState(false);
+
   const [fetchUser, setFetchUser] = useState(null);
+  const [fetchAds, setFetchAds] = useState(null);
 
 
   const handleMenuClick = (menuItem) => {
@@ -30,6 +31,8 @@ export default function UserPage() {
   const handleEditModalClose = () => {
     setIsEditModalOpen(false);
   };
+  
+  const [showForm, setShowForm] = useState(false);
 
   const handleAddButtonClick = () => {
     setShowForm(true);
@@ -49,7 +52,7 @@ export default function UserPage() {
         {selectedMenuItem === 'userData' ? (
           <UserData handleEditClick={handleEditClick} />
         ) : (
-          <UserList selectedMenuItem={selectedMenuItem} />
+          <UserList selectedMenuItem={selectedMenuItem} fetchAds={fetchAds} setFetchAds={setFetchAds}/>
         )}
 
       </div>
@@ -61,7 +64,7 @@ export default function UserPage() {
 
       {showForm && (
         <div className='modal-background'>
-          <AddAdForm closeModal={closeForm} />
+          <AddAdForm closeModal={closeForm} setFetchAds={setFetchAds}/>
         </div>
       )}
     </div>

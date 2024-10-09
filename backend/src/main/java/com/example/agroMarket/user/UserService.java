@@ -1,5 +1,6 @@
 package com.example.agroMarket.user;
 
+import com.example.agroMarket.ad.AdRepository;
 import com.example.agroMarket.exception.UserWithThisNameExistException;
 import com.example.agroMarket.exception.WrongUserID;
 import com.example.agroMarket.user.dto.*;
@@ -16,6 +17,7 @@ import java.util.List;
 @Service
 public class UserService {
     private UserRepository userRepository;
+    private AdRepository adRepository;
 
     // todo favourite as object id i think
     public AddUserResponseDTO addUser(UserDTO userDTO) {
@@ -23,15 +25,24 @@ public class UserService {
         List<String> userFavourite = new ArrayList<>();
         UserEntity userEntity = new UserEntity(null, userDTO.getAuthCode(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(), userDTO.getPhoneNumber(), userAds, userFavourite);
         if (userRepository.findUserEntityByEmail(userDTO.getEmail()).isPresent()) {
-            throw new UserWithThisNameExistException("Already exist user with this name or email");
+            throw new UserWithThisNameExistException("Already exist user with this email");
         }
         userRepository.save(userEntity);
         return new AddUserResponseDTO("ok", HttpStatus.ACCEPTED);
     }
 
     public GetUserResponseDTO getUser(String _id) {
-        UserEntity userEntity = userRepository.findUserEntityBy_id(_id).orElseThrow(() -> new WrongUserID("There is no user with this _id"));
-        UserDTO userDTO = new UserDTO(userEntity.getAuthCode(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getEmail(), userEntity.getPhoneNumber(), userEntity.getUserAd(), userEntity.getFavourite());
+        UserEntity userEntity = userRepository.findUserEntityBy_id(_id).
+                orElseThrow(
+                        () -> new WrongUserID("There is no user with this _id")
+                );
+        UserDTO userDTO = new UserDTO(userEntity.getAuthCode(),
+                                        userEntity.getFirstName(),
+                                        userEntity.getLastName(),
+                                        userEntity.getEmail(),
+                                        userEntity.getPhoneNumber(),
+                                        userEntity.getUserAd(),
+                                        userEntity.getFavourite());
         return new GetUserResponseDTO(userDTO, "ok", HttpStatus.OK);
     }
 
@@ -40,13 +51,20 @@ public class UserService {
         UserEntity userEntity = userRepository.findUserEntityByEmailAndAuthCode(userLoginDTO.getEmail(), userLoginDTO.getAuthCode()).orElseThrow(() -> new WrongUserID("Email or password is wrong"));
         UserDTO userDTO = new UserDTO(userEntity.getAuthCode(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getEmail(), userEntity.getPhoneNumber(), userEntity.getUserAd(), userEntity.getFavourite());
         String _id = String.valueOf(userEntity.get_id());
-        System.out.println("her moje id:  " + _id);
         return new CheckIfUserResponseDTO(userDTO, _id, "ok", HttpStatus.OK);
     }
 
 
     public DeleteUserResponseDTO deleteUser(ObjectId _id) {
-        userRepository.findUserEntityBy_id(_id).orElseThrow(() -> new WrongUserID("There is no user with this _id"));
+        UserEntity user = userRepository.findUserEntityBy_id(_id)
+                .orElseThrow(() -> new WrongUserID("There is no user with this _id"));
+
+        if (user.getUserAd() != null && !user.getUserAd().isEmpty()) {
+            for (String adId : user.getUserAd()) {
+                adRepository.deleteAdEntityBy_id(new ObjectId(adId));
+            }
+        }
+
         userRepository.deleteUserEntityBy_id(_id);
         return new DeleteUserResponseDTO("User deleted", HttpStatus.OK);
     }
