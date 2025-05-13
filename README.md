@@ -22,4 +22,3 @@ Panel główny: wyswietla wszytskie dostepne ogłoszenia,
 Portal ogłoszeń produktów rolnych z wykorzystaniem Java, frameworku Spring Boot oraz bazy NoSQL.
 Advertasing portal of agricultural products using Java, Spring Boot framework and NoSQL database.
 
-			do cv podział na kategorie widocznie fajne wsm 
