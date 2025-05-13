@@ -6,7 +6,7 @@ Technologie:
 
 Język backend: Java, Spring Framework
 Baza danych: NoSQL( MongoDB )
-Frontend: ??? 
+Frontend: React
 
 ------------------
 
